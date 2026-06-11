@@ -27,48 +27,52 @@ No rule takes effect until it is merged. Unreviewed auto-learning never reaches 
 
 ```
 anti_patterns/
-  python.yaml          ← Python (all frameworks)
-  fastapi.yaml         ← FastAPI-specific
-  react.yaml           ← React / React Native
-  universal.yaml       ← Language-agnostic
-CHANGELOG.md           ← Record of significant rule changes
+  architect.md         ← patterns for the Architect agent
+  staff-engineer.md    ← patterns for the Staff-Engineer agent
+  coder.md             ← patterns for the Coder agent
+  auditor.md           ← patterns for the Auditor agent
+  qa-sdet.md           ← patterns for the QA-SDET agent
+  recorder.md          ← patterns for the Recorder agent
+  shared.md            ← cross-role patterns
+  registry.json        ← ID allocation index (next available key, file mapping)
+CHANGELOG.md           ← record of significant rule changes
 ```
 
-One YAML file per tech stack. Add a new file for a new stack; the runner loads all `*.yaml`
-files in the `anti_patterns/` directory automatically.
+One file per agent role. An entry may appear in more than one role file when the same
+invariant has different role-specific guidance — IDs remain stable across files.
 
 ---
 
-## Anti-pattern YAML format
+## Entry format
 
-Each file is a list of entries:
+Each entry is a markdown section with an embedded YAML metadata block:
+
+````markdown
+## AP-030: Short Descriptive Title
 
 ```yaml
-- id: python.no-bare-except
-  description: >
-    Bare `except:` catches SystemExit and KeyboardInterrupt, masking crashes
-    and making the process unresponsive to signals.
-  fix: Use `except Exception:` or a specific exception type.
-  unit_domains: [api, agent-infra]   # which nexus domains this applies to
-  severity: fail                     # fail | warn
-  added_by: Auditor                  # who proposed it
-  source_feature: auth-middleware    # which feature run surfaced it
-
-- id: python.mutable-default-arg
-  description: >
-    Using a mutable object (list, dict) as a default argument is evaluated
-    once at function definition — mutations persist across calls.
-  fix: Use `None` as default and assign inside the function body.
-  unit_domains: [api, agent-infra]
-  severity: fail
-  added_by: Auditor
-  source_feature: user-service-refactor
+id: AP-030
+title: Short Descriptive Title
+roles: [Coder, Auditor]
+steps: [implementation, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [code]
+unit_domains: [api]
+triggers: [short_trigger_name]
+summary: One concise sentence — injected into agent handoffs.
 ```
 
-**Required fields:** `id`, `description`, `severity`
-**Optional fields:** `fix`, `unit_domains`, `added_by`, `source_feature`
+### Invariant
+The reusable invariant at risk — what must always be true.
 
-`id` must be unique across all files. Convention: `<stack>.<short-name>`.
+### Role Guidance
+- @Coder: Concrete instruction for this role.
+- @Auditor: What to check and how to fail it.
+````
+
+**Required metadata fields:** `id`, `title`, `roles`, `steps`, `summary`
+
+See `anti_patterns/README.md` for the full field reference and validation instructions.
 
 ---
 
