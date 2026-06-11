@@ -87,22 +87,21 @@ The rule will be active for the whole team on their next `nexus bootstrap`.
 
 ## Pointing the runner at this repo
 
-Set `NEXUS_GOVERNANCE_REMOTE` once and add it to your shell profile:
+This repo's URL is built into the runner — no configuration needed. Do an initial pull
+after installing the runner:
 
-**bash / zsh** (add to `~/.bashrc` or `~/.zshrc`):
-```bash
-export NEXUS_GOVERNANCE_REMOTE=https://github.com/alberto-velo/agents_antipatterns.git
-```
-
-**PowerShell** (add to `$PROFILE`):
-```powershell
-$env:NEXUS_GOVERNANCE_REMOTE = "https://github.com/alberto-velo/agents_antipatterns.git"
-```
-
-Then do an initial pull:
 ```bash
 nexus update-governance
 ```
 
 Run `nexus update-governance` again any time you want to pick up new rules before starting
 a feature.
+
+To override with a fork or a local clone:
+```bash
+# Remote fork
+export NEXUS_GOVERNANCE_REMOTE=https://github.com/your-org/agents_antipatterns.git
+
+# Local clone (useful when editing rules directly)
+export NEXUS_GOVERNANCE_DIR=/path/to/local/agents_antipatterns
+```
