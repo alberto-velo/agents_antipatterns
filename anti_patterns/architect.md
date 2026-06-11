@@ -4,10 +4,10 @@ Entries @Architect must apply when drafting source law or classifying risk.
 
 ---
 
-## AP-011: Hidden Ambient Dependencies in Declared Pure Interfaces
+## shared.hidden-ambient-dependency-pure-interface: Hidden Ambient Dependencies in Declared Pure Interfaces
 
 ```yaml
-id: AP-011
+id: shared.hidden-ambient-dependency-pure-interface
 title: Hidden Ambient Dependencies in Declared Pure Interfaces
 roles: [Architect, Staff-Engineer, Coder, Auditor]
 steps: [adr_draft, policy_audit, blueprint_draft, code_audit]
@@ -26,10 +26,10 @@ modeled as an ambient dependency.
 
 ---
 
-## AP-013: Divergent Validation Layers Behind a Claimed Closed Failure Alphabet
+## shared.divergent-validators-closed-failure-alphabet: Divergent Validation Layers Behind a Claimed Closed Failure Alphabet
 
 ```yaml
-id: AP-013
+id: shared.divergent-validators-closed-failure-alphabet
 title: Divergent Validation Layers Behind a Claimed Closed Failure Alphabet
 roles: [Architect, Staff-Engineer, Coder, Auditor]
 steps: [adr_draft, policy_audit, blueprint_draft, code_audit]
@@ -48,10 +48,10 @@ acceptance-equivalent or map stricter failures truthfully.
 
 ---
 
-## AP-017: Unreachable Operational Transition From Valid Restart States
+## shared.unreachable-operational-transition-restart: Unreachable Operational Transition From Valid Restart States
 
 ```yaml
-id: AP-017
+id: shared.unreachable-operational-transition-restart
 title: Unreachable Operational Transition From Valid Restart States
 roles: [Architect, Staff-Engineer, Coder, Auditor]
 steps: [adr_draft, policy_audit, blueprint_draft, implementation, code_audit]
@@ -71,10 +71,10 @@ transition out of deny-all startup mode.
 
 ---
 
-## AP-023: Under-Specified Canonical Closure For Operational Observability
+## shared.observability-closure-underspecified: Under-Specified Canonical Closure For Operational Observability
 
 ```yaml
-id: AP-023
+id: shared.observability-closure-underspecified
 title: Under-Specified Canonical Closure For Operational Observability
 roles: [Architect, Staff-Engineer, Coder, Auditor]
 steps: [adr_draft, policy_audit, blueprint_draft, blueprint_audit, implementation, code_audit]
@@ -94,10 +94,10 @@ that satisfies all other surface constraints.
 
 ---
 
-## AP-024: Source-Law Drift From Frozen Upstream APIs And Reachability Closure
+## shared.source-law-uses-nonexistent-upstream-api: Source-Law Drift From Frozen Upstream APIs And Reachability Closure
 
 ```yaml
-id: AP-024
+id: shared.source-law-uses-nonexistent-upstream-api
 title: Source-Law Drift From Frozen Upstream APIs And Reachability Closure
 roles: [Architect, Staff-Engineer, QA-SDET, Auditor]
 steps: [adr_draft, policy_audit, blueprint_draft, test_authoring, test_audit]
@@ -117,10 +117,10 @@ upstream surface and the unit's own ordering rules.
 
 ---
 
-## AP-026: Unprobed Framework Error Literals In Source Law
+## shared.unprobed-framework-error-literal: Unprobed Framework Error Literals In Source Law
 
 ```yaml
-id: AP-026
+id: shared.unprobed-framework-error-literal
 title: Unprobed Framework Error Literals In Source Law
 roles: [Architect, Staff-Engineer, QA-SDET, Auditor]
 steps: [adr_draft, policy_audit, blueprint_draft, test_authoring, test_audit]

@@ -4,10 +4,10 @@ Entries @Staff-Engineer must apply when drafting roadmaps and blueprints.
 
 ---
 
-## AP-001: State Leakage Through Missing Lifecycle Primitives
+## shared.stateful-component-missing-lifecycle: State Leakage Through Missing Lifecycle Primitives
 
 ```yaml
-id: AP-001
+id: shared.stateful-component-missing-lifecycle
 title: State Leakage Through Missing Lifecycle Primitives
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
@@ -26,10 +26,10 @@ Persistent task-boundary state must define clean-slate behavior.
 
 ---
 
-## AP-002: Semantic Permissiveness in Security Metadata
+## shared.security-metadata-open-type: Semantic Permissiveness in Security Metadata
 
 ```yaml
-id: AP-002
+id: shared.security-metadata-open-type
 title: Semantic Permissiveness in Security Metadata
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit]
@@ -47,10 +47,10 @@ Access-control fields must reject unexpected values at parse time.
 
 ---
 
-## AP-004: Specification Ambiguity in Transformation Steps
+## shared.unspecified-transformation-path: Specification Ambiguity in Transformation Steps
 
 ```yaml
-id: AP-004
+id: shared.unspecified-transformation-path
 title: Specification Ambiguity in Transformation Steps
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit]
@@ -68,10 +68,10 @@ Non-trivial transformations are not safe to leave to implementation inference.
 
 ---
 
-## AP-005: Fail-Open Defaults in Security Boundaries
+## shared.security-boundary-fail-open: Fail-Open Defaults in Security Boundaries
 
 ```yaml
-id: AP-005
+id: shared.security-boundary-fail-open
 title: Fail-Open Defaults in Security Boundaries
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit]
@@ -89,10 +89,10 @@ Malformed input at a security boundary must not fall through to allow.
 
 ---
 
-## AP-008: Ghost Coverage From Placeholder or Uncollected Tests
+## shared.ghost-coverage-placeholder-tests: Ghost Coverage From Placeholder or Uncollected Tests
 
 ```yaml
-id: AP-008
+id: shared.ghost-coverage-placeholder-tests
 title: Ghost Coverage From Placeholder or Uncollected Tests
 roles: [QA-SDET, Staff-Engineer, Auditor]
 steps: [blueprint_draft, test_authoring, test_audit]
@@ -110,10 +110,10 @@ Untestable prose encourages placeholder or comment-only coverage.
 
 ---
 
-## AP-014: Additive Blueprint Drift From Canonical Source Law
+## shared.blueprint-drift-adds-to-source-law: Additive Blueprint Drift From Canonical Source Law
 
 ```yaml
-id: AP-014
+id: shared.blueprint-drift-adds-to-source-law
 title: Additive Blueprint Drift From Canonical Source Law
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit]
@@ -131,10 +131,10 @@ Extra aliases, stronger annotations, or partial restatements can create a second
 
 ---
 
-## AP-018: Closed-Surface Coverage Gaps Behind Mocked Composition
+## shared.mocked-composition-misses-closed-surface: Closed-Surface Coverage Gaps Behind Mocked Composition
 
 ```yaml
-id: AP-018
+id: shared.mocked-composition-misses-closed-surface
 title: Closed-Surface Coverage Gaps Behind Mocked Composition
 roles: [QA-SDET, Staff-Engineer, Auditor]
 steps: [blueprint_draft, test_authoring, test_audit]
@@ -152,10 +152,10 @@ Mocked composition does not prove each published public symbol.
 
 ---
 
-## AP-021: Test-Side Invention of Non-Canonical Dependency Surfaces
+## shared.test-invents-noncanonical-dependency: Test-Side Invention of Non-Canonical Dependency Surfaces
 
 ```yaml
-id: AP-021
+id: shared.test-invents-noncanonical-dependency
 title: Test-Side Invention of Non-Canonical Dependency Surfaces
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, test_authoring, test_audit]
@@ -173,10 +173,10 @@ If QA must spy on a side effect or consume upstream types, the blueprint needs a
 
 ---
 
-## AP-023: Under-Specified Canonical Closure For Operational Observability
+## shared.observability-closure-underspecified: Under-Specified Canonical Closure For Operational Observability
 
 ```yaml
-id: AP-023
+id: shared.observability-closure-underspecified
 title: Under-Specified Canonical Closure For Operational Observability
 roles: [Architect, Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
@@ -195,10 +195,10 @@ Mandatory operational side effects need a compliant mechanism and test channel.
 
 ---
 
-## AP-025: Transitive Source-Law Dependency In Blueprint Handoffs
+## shared.blueprint-missing-transitive-source-law: Transitive Source-Law Dependency In Blueprint Handoffs
 
 ```yaml
-id: AP-025
+id: shared.blueprint-missing-transitive-source-law
 title: Transitive Source-Law Dependency In Blueprint Handoffs
 roles: [Staff-Engineer, Coder, QA-SDET, Auditor]
 steps: [blueprint_draft, blueprint_audit]
@@ -217,10 +217,10 @@ Coder and QA must not need ADR sections to discover fixture matrices, literals, 
 
 ---
 
-## AP-027: Unanchored Import Surface In Pre-Implementation Tests
+## shared.unanchored-import-surface-preimpl-tests: Unanchored Import Surface In Pre-Implementation Tests
 
 ```yaml
-id: AP-027
+id: shared.unanchored-import-surface-preimpl-tests
 title: Unanchored Import Surface In Pre-Implementation Tests
 roles: [Staff-Engineer, QA-SDET, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, test_authoring, test_audit]
@@ -239,10 +239,10 @@ QA cannot execute public-surface tests without a sanctioned binding.
 
 ---
 
-## AP-028: Non-Falsifying Contract Assertions
+## shared.non-falsifying-contract-assertion: Non-Falsifying Contract Assertions
 
 ```yaml
-id: AP-028
+id: shared.non-falsifying-contract-assertion
 title: Non-Falsifying Contract Assertions
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, test_authoring, test_audit]
@@ -260,10 +260,10 @@ Assertions that only prove a scenario ran create false confidence.
 
 ---
 
-## AP-029: Unreachable Mocked Failure Paths
+## shared.unreachable-mocked-failure-path: Unreachable Mocked Failure Paths
 
 ```yaml
-id: AP-029
+id: shared.unreachable-mocked-failure-path
 title: Unreachable Mocked Failure Paths
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, test_authoring, test_audit]

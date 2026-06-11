@@ -34,7 +34,6 @@ anti_patterns/
   qa-sdet.md           ← patterns for the QA-SDET agent
   recorder.md          ← patterns for the Recorder agent
   shared.md            ← cross-role patterns
-  registry.json        ← ID allocation index (next available key, file mapping)
 CHANGELOG.md           ← record of significant rule changes
 ```
 
@@ -48,11 +47,11 @@ invariant has different role-specific guidance — IDs remain stable across file
 Each entry is a markdown section with an embedded YAML metadata block:
 
 ````markdown
-## AP-030: Short Descriptive Title
+## scope.my-new-pattern: Short Title
 
 ```yaml
-id: AP-030
-title: Short Descriptive Title
+id: scope.my-new-pattern
+title: Short Title
 roles: [Coder, Auditor]
 steps: [implementation, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
@@ -63,14 +62,14 @@ summary: One concise sentence — injected into agent handoffs.
 ```
 
 ### Invariant
-The reusable invariant at risk — what must always be true.
+The reusable invariant at risk.
 
 ### Role Guidance
 - @Coder: Concrete instruction for this role.
 - @Auditor: What to check and how to fail it.
 ````
 
-**Required metadata fields:** `id`, `title`, `roles`, `steps`, `summary`
+**Required fields:** id, title, roles, steps, summary
 
 See `anti_patterns/README.md` for the full field reference and validation instructions.
 

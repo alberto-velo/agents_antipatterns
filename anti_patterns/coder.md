@@ -4,10 +4,10 @@ Entries @Coder must apply during implementation.
 
 ---
 
-## AP-001: State Leakage Through Missing Lifecycle Primitives
+## shared.stateful-component-missing-lifecycle: State Leakage Through Missing Lifecycle Primitives
 
 ```yaml
-id: AP-001
+id: shared.stateful-component-missing-lifecycle
 title: State Leakage Through Missing Lifecycle Primitives
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
@@ -26,10 +26,10 @@ Stateful storage must provide clean-slate semantics.
 
 ---
 
-## AP-002: Semantic Permissiveness in Security Metadata
+## shared.security-metadata-open-type: Semantic Permissiveness in Security Metadata
 
 ```yaml
-id: AP-002
+id: shared.security-metadata-open-type
 title: Semantic Permissiveness in Security Metadata
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
@@ -47,10 +47,10 @@ Bare `str` or unbounded `int` fields in access paths allow poisoning.
 
 ---
 
-## AP-003: Regressive Over-Restriction
+## shared.hardening-blocks-authorized-input: Regressive Over-Restriction
 
 ```yaml
-id: AP-003
+id: shared.hardening-blocks-authorized-input
 title: Regressive Over-Restriction
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
@@ -68,10 +68,10 @@ Tightened validation is a regression if it blocks source-law-sanctioned values.
 
 ---
 
-## AP-004: Specification Ambiguity in Transformation Steps
+## shared.unspecified-transformation-path: Specification Ambiguity in Transformation Steps
 
 ```yaml
-id: AP-004
+id: shared.unspecified-transformation-path
 title: Specification Ambiguity in Transformation Steps
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
@@ -89,10 +89,10 @@ Different inferred normalization steps can produce different bytes or comparison
 
 ---
 
-## AP-005: Fail-Open Defaults in Security Boundaries
+## shared.security-boundary-fail-open: Fail-Open Defaults in Security Boundaries
 
 ```yaml
-id: AP-005
+id: shared.security-boundary-fail-open
 title: Fail-Open Defaults in Security Boundaries
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
@@ -110,10 +110,10 @@ Exceptions and default paths in security code must not lead to allow/pass-throug
 
 ---
 
-## AP-011: Hidden Ambient Dependencies in Declared Pure Interfaces
+## shared.hidden-ambient-dependency-pure-interface: Hidden Ambient Dependencies in Declared Pure Interfaces
 
 ```yaml
-id: AP-011
+id: shared.hidden-ambient-dependency-pure-interface
 title: Hidden Ambient Dependencies in Declared Pure Interfaces
 roles: [Architect, Staff-Engineer, Coder, Auditor]
 steps: [adr_draft, policy_audit, blueprint_draft, implementation, code_audit]
@@ -131,10 +131,10 @@ Behavior-changing inputs must be declared.
 
 ---
 
-## AP-012: Fail-Closed Probe Semantics Lost Through Convenience APIs
+## coder.convenience-api-erases-probe-semantics: Fail-Closed Probe Semantics Lost Through Convenience APIs
 
 ```yaml
-id: AP-012
+id: coder.convenience-api-erases-probe-semantics
 title: Fail-Closed Probe Semantics Lost Through Convenience APIs
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
@@ -153,10 +153,10 @@ Missing artifact and failed probe are distinct outcomes when source law says so.
 
 ---
 
-## AP-013: Divergent Validation Layers Behind a Claimed Closed Failure Alphabet
+## shared.divergent-validators-closed-failure-alphabet: Divergent Validation Layers Behind a Claimed Closed Failure Alphabet
 
 ```yaml
-id: AP-013
+id: shared.divergent-validators-closed-failure-alphabet
 title: Divergent Validation Layers Behind a Claimed Closed Failure Alphabet
 roles: [Architect, Staff-Engineer, Coder, Auditor]
 steps: [adr_draft, policy_audit, blueprint_draft, implementation, code_audit]
@@ -174,10 +174,10 @@ Later schema rejection cannot be hidden behind a misleading canonical literal.
 
 ---
 
-## AP-014: Additive Blueprint Drift From Canonical Source Law
+## shared.blueprint-drift-adds-to-source-law: Additive Blueprint Drift From Canonical Source Law
 
 ```yaml
-id: AP-014
+id: shared.blueprint-drift-adds-to-source-law
 title: Additive Blueprint Drift From Canonical Source Law
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
@@ -195,10 +195,10 @@ Stricter-looking additions can still be wrong if they diverge from source law.
 
 ---
 
-## AP-016: Constructor-Based Schema Validation on Untrusted Rows
+## coder.constructor-bypasses-schema-validation: Constructor-Based Schema Validation on Untrusted Rows
 
 ```yaml
-id: AP-016
+id: coder.constructor-bypasses-schema-validation
 title: Constructor-Based Schema Validation on Untrusted Rows
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
@@ -217,10 +217,10 @@ summary: Arbitrary decoded input must use schema validation APIs that preserve d
 
 ---
 
-## AP-017: Unreachable Operational Transition From Valid Restart States
+## shared.unreachable-operational-transition-restart: Unreachable Operational Transition From Valid Restart States
 
 ```yaml
-id: AP-017
+id: shared.unreachable-operational-transition-restart
 title: Unreachable Operational Transition From Valid Restart States
 roles: [Architect, Staff-Engineer, Coder, Auditor]
 steps: [adr_draft, policy_audit, blueprint_draft, implementation, code_audit]
@@ -239,10 +239,10 @@ Valid restart paths must have explicit operational transition actions.
 
 ---
 
-## AP-020: Uncovered Defensive Fallback in Closed Branch Logic
+## shared.defensive-fallback-branch-omitted: Uncovered Defensive Fallback in Closed Branch Logic
 
 ```yaml
-id: AP-020
+id: shared.defensive-fallback-branch-omitted
 title: Uncovered Defensive Fallback in Closed Branch Logic
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
@@ -260,10 +260,10 @@ Fallback branches remain normative even if upstream validation usually rejects b
 
 ---
 
-## AP-021: Test-Side Invention of Non-Canonical Dependency Surfaces
+## shared.test-invents-noncanonical-dependency: Test-Side Invention of Non-Canonical Dependency Surfaces
 
 ```yaml
-id: AP-021
+id: shared.test-invents-noncanonical-dependency
 title: Test-Side Invention of Non-Canonical Dependency Surfaces
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [test_authoring, test_audit, implementation, code_audit]
@@ -281,10 +281,10 @@ Tests do not amend the blueprint or upstream API.
 
 ---
 
-## AP-022: Unproven Operational Side-Effect Invariants
+## shared.side-effect-invariant-unproven: Unproven Operational Side-Effect Invariants
 
 ```yaml
-id: AP-022
+id: shared.side-effect-invariant-unproven
 title: Unproven Operational Side-Effect Invariants
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
@@ -302,10 +302,10 @@ Payload correctness does not prove forbidden calls, ordering, or preserved side 
 
 ---
 
-## AP-023: Under-Specified Canonical Closure For Operational Observability
+## shared.observability-closure-underspecified: Under-Specified Canonical Closure For Operational Observability
 
 ```yaml
-id: AP-023
+id: shared.observability-closure-underspecified
 title: Under-Specified Canonical Closure For Operational Observability
 roles: [Architect, Staff-Engineer, Coder, Auditor]
 steps: [adr_draft, policy_audit, blueprint_draft, blueprint_audit, implementation, code_audit]
@@ -324,10 +324,10 @@ Mandatory side effects need a legal implementation and observation path.
 
 ---
 
-## AP-025: Transitive Source-Law Dependency In Blueprint Handoffs
+## shared.blueprint-missing-transitive-source-law: Transitive Source-Law Dependency In Blueprint Handoffs
 
 ```yaml
-id: AP-025
+id: shared.blueprint-missing-transitive-source-law
 title: Transitive Source-Law Dependency In Blueprint Handoffs
 roles: [Staff-Engineer, Coder, QA-SDET, Auditor]
 steps: [blueprint_draft, blueprint_audit, test_authoring, test_audit, implementation]
@@ -346,10 +346,10 @@ Blueprint-bound roles must not discover normative obligations by reading ADR sec
 
 ---
 
-## AP-027: Unanchored Import Surface In Pre-Implementation Tests
+## shared.unanchored-import-surface-preimpl-tests: Unanchored Import Surface In Pre-Implementation Tests
 
 ```yaml
-id: AP-027
+id: shared.unanchored-import-surface-preimpl-tests
 title: Unanchored Import Surface In Pre-Implementation Tests
 roles: [Staff-Engineer, QA-SDET, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, test_authoring, test_audit, implementation]
@@ -368,10 +368,10 @@ Pre-implementation tests cannot impose an unauthorized public import channel.
 
 ---
 
-## AP-028: Non-Falsifying Contract Assertions
+## shared.non-falsifying-contract-assertion: Non-Falsifying Contract Assertions
 
 ```yaml
-id: AP-028
+id: shared.non-falsifying-contract-assertion
 title: Non-Falsifying Contract Assertions
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
@@ -389,10 +389,10 @@ Implementation must satisfy the blueprint, not merely the weakest passing assert
 
 ---
 
-## AP-029: Unreachable Mocked Failure Paths
+## shared.unreachable-mocked-failure-path: Unreachable Mocked Failure Paths
 
 ```yaml
-id: AP-029
+id: shared.unreachable-mocked-failure-path
 title: Unreachable Mocked Failure Paths
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]

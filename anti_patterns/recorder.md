@@ -4,10 +4,10 @@ Entries @Recorder must apply when updating digests, indexes, and registry histor
 
 ---
 
-## AP-007: Canonical Artifact Path Drift
+## shared.canonical-artifact-path-drift: Canonical Artifact Path Drift
 
 ```yaml
-id: AP-007
+id: shared.canonical-artifact-path-drift
 title: Canonical Artifact Path Drift
 roles: [Recorder, Auditor]
 steps: [digest_update, code_audit, blueprint_audit]
@@ -26,10 +26,10 @@ Completion history must preserve deterministic links to the operative artifacts.
 
 ---
 
-## AP-023: Under-Specified Canonical Closure For Operational Observability
+## shared.observability-closure-underspecified: Under-Specified Canonical Closure For Operational Observability
 
 ```yaml
-id: AP-023
+id: shared.observability-closure-underspecified
 title: Under-Specified Canonical Closure For Operational Observability
 roles: [Recorder, Auditor]
 steps: [digest_update, blueprint_audit, code_audit]
@@ -48,10 +48,10 @@ Repeated downstream oscillation is workflow evidence, not just retry count.
 
 ---
 
-## AP-028: Non-Falsifying Contract Assertions
+## shared.non-falsifying-contract-assertion: Non-Falsifying Contract Assertions
 
 ```yaml
-id: AP-028
+id: shared.non-falsifying-contract-assertion
 title: Non-Falsifying Contract Assertions
 roles: [Recorder, Auditor]
 steps: [digest_update, test_audit, code_audit]

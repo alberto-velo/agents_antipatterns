@@ -1,9 +1,8 @@
-# Role-Specific Anti-Pattern Registry
+# Anti-Pattern Registry
 
 This directory is the canonical anti-pattern registry for the Nexus swarm.
-Each file is scoped to the agent that consumes it. The Nexus State Runner parses
-these files, selects relevant entries for the active handoff, and renders
-summaries in `.cursor/workflow/current_handoff.md`.
+Each file is scoped to the agent that primarily consumes it. The runner parses
+these files and injects relevant entries into agent handoffs.
 
 ## Files
 
@@ -11,61 +10,62 @@ summaries in `.cursor/workflow/current_handoff.md`.
 | :--- | :--- |
 | `architect.md` | @Architect |
 | `staff-engineer.md` | @Staff-Engineer |
+| `coder.md` | @Coder |
 | `auditor.md` | @Auditor |
 | `qa-sdet.md` | @QA-SDET |
-| `coder.md` | @Coder |
 | `recorder.md` | @Recorder |
-| `shared.md` | Cross-role governance |
-| `registry.json` | ID allocation and file index |
+| `shared.md` | Cross-role — all agents |
 
-Entries may appear in more than one role file when the same invariant has
-different role-specific guidance. IDs remain stable across files so historical
-trace references continue to work.
+Entries appear in more than one role file when the same invariant has different
+role-specific guidance.
 
-## ID Allocation
+## ID format
 
-`registry.json` is the source for the next available anti-pattern key. Before
-adding a new reusable entry, run:
+IDs use a slug format: `<scope>.<kebab-case-title>`
 
-```powershell
-nexus anti-patterns next-id
-```
+- `scope` is the primary file the entry belongs to (`shared`, `coder`, `qa-sdet`, etc.)
+- `kebab-case-title` is a short description of the invariant at risk
 
-After adding the entry to the affected role file and updating `registry.json`,
-run:
+Examples: `shared.security-boundary-fail-open`, `coder.convenience-api-erases-probe-semantics`
 
-```powershell
-nexus anti-patterns validate
-```
+IDs are unique by construction — no counter, no registry file needed.
+Uniqueness is validated automatically when a PR is opened.
 
-The validator fails if the JSON index drifts from the markdown files or if
-`next_id` is not greater than the highest allocated key.
+## Adding a new entry
 
-## Entry Metadata Contract
+1. Add the entry to the relevant role file(s) using this format:
 
-Every entry must use this shape:
-
-````md
-## AP-000: Title
+````markdown
+## scope.my-new-pattern: Short Title
 
 ```yaml
-id: AP-000
-title: Title
-roles: [Coder, Auditor]
-steps: [implementation, code_audit]
+id: scope.my-new-pattern
+title: Short Title
+roles: [Role1, Role2]
+steps: [step_name, step_name]
 risk_levels: [1, 2, 3, 4, 5]
-domains: [tests, code]
-triggers: [short_trigger_name]
-summary: One concise sentence used in generated handoffs.
+domains: [domain]
+unit_domains: [api]
+triggers: [trigger_name]
+summary: One concise sentence injected into agent handoffs.
 ```
 
 ### Invariant
 The reusable invariant at risk.
 
 ### Role Guidance
-- @Role: Concrete instruction.
+- @Role1: Concrete instruction.
+- @Role2: What to check.
 ````
 
-The test suite and `anti-patterns validate` helper validate required metadata,
-known roles, known workflow steps, risk levels, duplicate IDs within a file, the
-global registry index, and handoff selection behavior.
+2. Open a PR — the CI duplicate-slug check runs automatically.
+3. Get a teammate approval and merge.
+4. Run `nexus update-governance` on all machines to pull the new rule.
+
+## Validation
+
+Check for duplicate slugs across all files:
+
+```bash
+nexus anti-patterns validate
+```

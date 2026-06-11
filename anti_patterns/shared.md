@@ -4,10 +4,10 @@ Cross-role entries that protect workflow integrity across multiple agents.
 
 ---
 
-## AP-007: Canonical Artifact Path Drift
+## shared.canonical-artifact-path-drift: Canonical Artifact Path Drift
 
 ```yaml
-id: AP-007
+id: shared.canonical-artifact-path-drift
 title: Canonical Artifact Path Drift
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
@@ -29,10 +29,10 @@ single canonical path.
 
 ---
 
-## AP-019: Control-Plane Marker Leakage Into Executable Artifacts
+## shared.control-plane-marker-in-executable-artifact: Control-Plane Marker Leakage Into Executable Artifacts
 
 ```yaml
-id: AP-019
+id: shared.control-plane-marker-in-executable-artifact
 title: Control-Plane Marker Leakage Into Executable Artifacts
 roles: [QA-SDET, Coder, Auditor]
 steps: [test_authoring, test_audit, implementation, code_audit]

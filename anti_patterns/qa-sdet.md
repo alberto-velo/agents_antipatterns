@@ -4,10 +4,10 @@ Entries @QA-SDET must apply when authoring or executing tests.
 
 ---
 
-## AP-006: Import Masking in Test Suites
+## qa-sdet.import-masking-hides-failure: Import Masking in Test Suites
 
 ```yaml
-id: AP-006
+id: qa-sdet.import-masking-hides-failure
 title: Import Masking in Test Suites
 roles: [QA-SDET, Auditor]
 steps: [test_authoring, test_audit]
@@ -26,10 +26,10 @@ Core implementation imports must not be wrapped in `try/except ImportError`.
 
 ---
 
-## AP-008: Ghost Coverage From Placeholder or Uncollected Tests
+## shared.ghost-coverage-placeholder-tests: Ghost Coverage From Placeholder or Uncollected Tests
 
 ```yaml
-id: AP-008
+id: shared.ghost-coverage-placeholder-tests
 title: Ghost Coverage From Placeholder or Uncollected Tests
 roles: [QA-SDET, Staff-Engineer, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft]
@@ -48,10 +48,10 @@ tests are missing coverage.
 
 ---
 
-## AP-009: Test Contract Invention
+## qa-sdet.test-invents-unlicensed-contract: Test Contract Invention
 
 ```yaml
-id: AP-009
+id: qa-sdet.test-invents-unlicensed-contract
 title: Test Contract Invention
 roles: [QA-SDET, Staff-Engineer, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft]
@@ -70,10 +70,10 @@ the blueprint or approved upstream behavior.
 
 ---
 
-## AP-010: Partial Assertion of Structured Error Contracts
+## qa-sdet.partial-structured-error-assertion: Partial Assertion of Structured Error Contracts
 
 ```yaml
-id: AP-010
+id: qa-sdet.partial-structured-error-assertion
 title: Partial Assertion of Structured Error Contracts
 roles: [QA-SDET, Staff-Engineer, Auditor]
 steps: [test_authoring, test_audit, code_audit]
@@ -91,10 +91,10 @@ Checking one convenient field can let non-verbatim error translations pass.
 
 ---
 
-## AP-015: State-Matrix Coverage Collapse Through Subcomponent-Only Testing
+## qa-sdet.state-matrix-subcomponent-only-coverage: State-Matrix Coverage Collapse Through Subcomponent-Only Testing
 
 ```yaml
-id: AP-015
+id: qa-sdet.state-matrix-subcomponent-only-coverage
 title: State-Matrix Coverage Collapse Through Subcomponent-Only Testing
 roles: [QA-SDET, Staff-Engineer, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft]
@@ -113,10 +113,10 @@ state-bearing payload.
 
 ---
 
-## AP-018: Closed-Surface Coverage Gaps Behind Mocked Composition
+## shared.mocked-composition-misses-closed-surface: Closed-Surface Coverage Gaps Behind Mocked Composition
 
 ```yaml
-id: AP-018
+id: shared.mocked-composition-misses-closed-surface
 title: Closed-Surface Coverage Gaps Behind Mocked Composition
 roles: [QA-SDET, Staff-Engineer, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft]
@@ -135,10 +135,10 @@ symbol's own contract.
 
 ---
 
-## AP-019: Control-Plane Marker Leakage Into Executable Artifacts
+## shared.control-plane-marker-in-executable-artifact: Control-Plane Marker Leakage Into Executable Artifacts
 
 ```yaml
-id: AP-019
+id: shared.control-plane-marker-in-executable-artifact
 title: Control-Plane Marker Leakage Into Executable Artifacts
 roles: [QA-SDET, Coder, Auditor]
 steps: [test_authoring, test_audit, implementation, code_audit]
@@ -158,10 +158,10 @@ language comments.
 
 ---
 
-## AP-020: Uncovered Defensive Fallback in Closed Branch Logic
+## shared.defensive-fallback-branch-omitted: Uncovered Defensive Fallback in Closed Branch Logic
 
 ```yaml
-id: AP-020
+id: shared.defensive-fallback-branch-omitted
 title: Uncovered Defensive Fallback in Closed Branch Logic
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
@@ -180,10 +180,10 @@ still exists.
 
 ---
 
-## AP-021: Test-Side Invention of Non-Canonical Dependency Surfaces
+## shared.test-invents-noncanonical-dependency: Test-Side Invention of Non-Canonical Dependency Surfaces
 
 ```yaml
-id: AP-021
+id: shared.test-invents-noncanonical-dependency
 title: Test-Side Invention of Non-Canonical Dependency Surfaces
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [test_authoring, test_audit, implementation, code_audit]
@@ -202,10 +202,10 @@ implementation to drift.
 
 ---
 
-## AP-022: Unproven Operational Side-Effect Invariants
+## shared.side-effect-invariant-unproven: Unproven Operational Side-Effect Invariants
 
 ```yaml
-id: AP-022
+id: shared.side-effect-invariant-unproven
 title: Unproven Operational Side-Effect Invariants
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
@@ -224,10 +224,10 @@ alert ordering.
 
 ---
 
-## AP-024: Source-Law Drift From Frozen Upstream APIs And Reachability Closure
+## shared.source-law-uses-nonexistent-upstream-api: Source-Law Drift From Frozen Upstream APIs And Reachability Closure
 
 ```yaml
-id: AP-024
+id: shared.source-law-uses-nonexistent-upstream-api
 title: Source-Law Drift From Frozen Upstream APIs And Reachability Closure
 roles: [Architect, Staff-Engineer, QA-SDET, Auditor]
 steps: [adr_draft, policy_audit, blueprint_draft, test_authoring, test_audit]
@@ -246,10 +246,10 @@ QA must not invent compatibility shims for impossible imports or unreachable row
 
 ---
 
-## AP-025: Transitive Source-Law Dependency In Blueprint Handoffs
+## shared.blueprint-missing-transitive-source-law: Transitive Source-Law Dependency In Blueprint Handoffs
 
 ```yaml
-id: AP-025
+id: shared.blueprint-missing-transitive-source-law
 title: Transitive Source-Law Dependency In Blueprint Handoffs
 roles: [Staff-Engineer, Coder, QA-SDET, Auditor]
 steps: [blueprint_draft, blueprint_audit, test_authoring, test_audit, implementation]
@@ -268,10 +268,10 @@ A Level 4-5 blueprint must be self-contained for Coder and QA.
 
 ---
 
-## AP-026: Unprobed Framework Error Literals In Source Law
+## shared.unprobed-framework-error-literal: Unprobed Framework Error Literals In Source Law
 
 ```yaml
-id: AP-026
+id: shared.unprobed-framework-error-literal
 title: Unprobed Framework Error Literals In Source Law
 roles: [Architect, Staff-Engineer, QA-SDET, Auditor]
 steps: [adr_draft, policy_audit, blueprint_draft, test_authoring, test_audit]
@@ -290,10 +290,10 @@ Framework diagnostic literals must be probed before QA is asked to assert them.
 
 ---
 
-## AP-027: Unanchored Import Surface In Pre-Implementation Tests
+## shared.unanchored-import-surface-preimpl-tests: Unanchored Import Surface In Pre-Implementation Tests
 
 ```yaml
-id: AP-027
+id: shared.unanchored-import-surface-preimpl-tests
 title: Unanchored Import Surface In Pre-Implementation Tests
 roles: [Staff-Engineer, QA-SDET, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, test_authoring, test_audit, implementation]
@@ -312,10 +312,10 @@ QA cannot write executable public-surface tests without an approved import chann
 
 ---
 
-## AP-028: Non-Falsifying Contract Assertions
+## shared.non-falsifying-contract-assertion: Non-Falsifying Contract Assertions
 
 ```yaml
-id: AP-028
+id: shared.non-falsifying-contract-assertion
 title: Non-Falsifying Contract Assertions
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
@@ -333,10 +333,10 @@ Asserting that something returned or still exists is not contract coverage.
 
 ---
 
-## AP-029: Unreachable Mocked Failure Paths
+## shared.unreachable-mocked-failure-path: Unreachable Mocked Failure Paths
 
 ```yaml
-id: AP-029
+id: shared.unreachable-mocked-failure-path
 title: Unreachable Mocked Failure Paths
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]

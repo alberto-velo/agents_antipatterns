@@ -4,10 +4,10 @@ Entries @Auditor must apply when reviewing source law, blueprints, tests, and co
 
 ---
 
-## AP-001: State Leakage Through Missing Lifecycle Primitives
+## shared.stateful-component-missing-lifecycle: State Leakage Through Missing Lifecycle Primitives
 
 ```yaml
-id: AP-001
+id: shared.stateful-component-missing-lifecycle
 title: State Leakage Through Missing Lifecycle Primitives
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
@@ -26,10 +26,10 @@ Persistent task-boundary state must not leak between executions.
 
 ---
 
-## AP-002: Semantic Permissiveness in Security Metadata
+## shared.security-metadata-open-type: Semantic Permissiveness in Security Metadata
 
 ```yaml
-id: AP-002
+id: shared.security-metadata-open-type
 title: Semantic Permissiveness in Security Metadata
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
@@ -47,10 +47,10 @@ Open access-control types can let arbitrary values bypass validation.
 
 ---
 
-## AP-003: Regressive Over-Restriction
+## shared.hardening-blocks-authorized-input: Regressive Over-Restriction
 
 ```yaml
-id: AP-003
+id: shared.hardening-blocks-authorized-input
 title: Regressive Over-Restriction
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
@@ -68,10 +68,10 @@ Hardening must account for all legitimate input shapes.
 
 ---
 
-## AP-004: Specification Ambiguity in Transformation Steps
+## shared.unspecified-transformation-path: Specification Ambiguity in Transformation Steps
 
 ```yaml
-id: AP-004
+id: shared.unspecified-transformation-path
 title: Specification Ambiguity in Transformation Steps
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
@@ -89,10 +89,10 @@ Inferred normalization can produce divergent byte sequences or comparisons.
 
 ---
 
-## AP-005: Fail-Open Defaults in Security Boundaries
+## shared.security-boundary-fail-open: Fail-Open Defaults in Security Boundaries
 
 ```yaml
-id: AP-005
+id: shared.security-boundary-fail-open
 title: Fail-Open Defaults in Security Boundaries
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
@@ -110,10 +110,10 @@ Exception/default paths in security logic must explicitly deny.
 
 ---
 
-## AP-006: Import Masking in Test Suites
+## qa-sdet.import-masking-hides-failure: Import Masking in Test Suites
 
 ```yaml
-id: AP-006
+id: qa-sdet.import-masking-hides-failure
 title: Import Masking in Test Suites
 roles: [QA-SDET, Auditor]
 steps: [test_audit]
@@ -132,10 +132,10 @@ Masked imports create false green test signals.
 
 ---
 
-## AP-007: Canonical Artifact Path Drift
+## shared.canonical-artifact-path-drift: Canonical Artifact Path Drift
 
 ```yaml
-id: AP-007
+id: shared.canonical-artifact-path-drift
 title: Canonical Artifact Path Drift
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
@@ -154,10 +154,10 @@ Review must not depend on filesystem discovery.
 
 ---
 
-## AP-008: Ghost Coverage From Placeholder or Uncollected Tests
+## shared.ghost-coverage-placeholder-tests: Ghost Coverage From Placeholder or Uncollected Tests
 
 ```yaml
-id: AP-008
+id: shared.ghost-coverage-placeholder-tests
 title: Ghost Coverage From Placeholder or Uncollected Tests
 roles: [QA-SDET, Staff-Engineer, Auditor]
 steps: [test_audit]
@@ -175,10 +175,10 @@ Coverage exists only when collected executable assertions run.
 
 ---
 
-## AP-009: Test Contract Invention
+## qa-sdet.test-invents-unlicensed-contract: Test Contract Invention
 
 ```yaml
-id: AP-009
+id: qa-sdet.test-invents-unlicensed-contract
 title: Test Contract Invention
 roles: [QA-SDET, Staff-Engineer, Auditor]
 steps: [test_audit]
@@ -196,10 +196,10 @@ Invented test expectations validate local guesses instead of source law.
 
 ---
 
-## AP-010: Partial Assertion of Structured Error Contracts
+## qa-sdet.partial-structured-error-assertion: Partial Assertion of Structured Error Contracts
 
 ```yaml
-id: AP-010
+id: qa-sdet.partial-structured-error-assertion
 title: Partial Assertion of Structured Error Contracts
 roles: [QA-SDET, Staff-Engineer, Auditor]
 steps: [test_audit, code_audit]
@@ -217,10 +217,10 @@ Partial assertions can allow payload drift to pass.
 
 ---
 
-## AP-011: Hidden Ambient Dependencies in Declared Pure Interfaces
+## shared.hidden-ambient-dependency-pure-interface: Hidden Ambient Dependencies in Declared Pure Interfaces
 
 ```yaml
-id: AP-011
+id: shared.hidden-ambient-dependency-pure-interface
 title: Hidden Ambient Dependencies in Declared Pure Interfaces
 roles: [Architect, Staff-Engineer, Coder, Auditor]
 steps: [policy_audit, blueprint_audit, code_audit]
@@ -238,10 +238,10 @@ Purity claims must match actual runtime dependencies.
 
 ---
 
-## AP-012: Fail-Closed Probe Semantics Lost Through Convenience APIs
+## coder.convenience-api-erases-probe-semantics: Fail-Closed Probe Semantics Lost Through Convenience APIs
 
 ```yaml
-id: AP-012
+id: coder.convenience-api-erases-probe-semantics
 title: Fail-Closed Probe Semantics Lost Through Convenience APIs
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
@@ -260,10 +260,10 @@ Missing and failed probes are distinct when source law says so.
 
 ---
 
-## AP-013: Divergent Validation Layers Behind a Claimed Closed Failure Alphabet
+## shared.divergent-validators-closed-failure-alphabet: Divergent Validation Layers Behind a Claimed Closed Failure Alphabet
 
 ```yaml
-id: AP-013
+id: shared.divergent-validators-closed-failure-alphabet
 title: Divergent Validation Layers Behind a Claimed Closed Failure Alphabet
 roles: [Architect, Staff-Engineer, Coder, Auditor]
 steps: [policy_audit, blueprint_audit, code_audit]
@@ -281,10 +281,10 @@ Later-layer rejection cannot be mislabeled as an unrelated canonical cause.
 
 ---
 
-## AP-014: Additive Blueprint Drift From Canonical Source Law
+## shared.blueprint-drift-adds-to-source-law: Additive Blueprint Drift From Canonical Source Law
 
 ```yaml
-id: AP-014
+id: shared.blueprint-drift-adds-to-source-law
 title: Additive Blueprint Drift From Canonical Source Law
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
@@ -302,10 +302,10 @@ The blueprint must remain the same contract as source law.
 
 ---
 
-## AP-015: State-Matrix Coverage Collapse Through Subcomponent-Only Testing
+## qa-sdet.state-matrix-subcomponent-only-coverage: State-Matrix Coverage Collapse Through Subcomponent-Only Testing
 
 ```yaml
-id: AP-015
+id: qa-sdet.state-matrix-subcomponent-only-coverage
 title: State-Matrix Coverage Collapse Through Subcomponent-Only Testing
 roles: [QA-SDET, Staff-Engineer, Auditor]
 steps: [test_audit]
@@ -323,10 +323,10 @@ Helper tests do not prove entrypoint payload mapping.
 
 ---
 
-## AP-016: Constructor-Based Schema Validation on Untrusted Rows
+## coder.constructor-bypasses-schema-validation: Constructor-Based Schema Validation on Untrusted Rows
 
 ```yaml
-id: AP-016
+id: coder.constructor-bypasses-schema-validation
 title: Constructor-Based Schema Validation on Untrusted Rows
 roles: [Staff-Engineer, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
@@ -345,10 +345,10 @@ Constructor forms can leak host-language exceptions outside declared channels.
 
 ---
 
-## AP-017: Unreachable Operational Transition From Valid Restart States
+## shared.unreachable-operational-transition-restart: Unreachable Operational Transition From Valid Restart States
 
 ```yaml
-id: AP-017
+id: shared.unreachable-operational-transition-restart
 title: Unreachable Operational Transition From Valid Restart States
 roles: [Architect, Staff-Engineer, Coder, Auditor]
 steps: [policy_audit, blueprint_audit, code_audit]
@@ -367,10 +367,10 @@ Every successful bootstrap path needs an explicit transition action.
 
 ---
 
-## AP-018: Closed-Surface Coverage Gaps Behind Mocked Composition
+## shared.mocked-composition-misses-closed-surface: Closed-Surface Coverage Gaps Behind Mocked Composition
 
 ```yaml
-id: AP-018
+id: shared.mocked-composition-misses-closed-surface
 title: Closed-Surface Coverage Gaps Behind Mocked Composition
 roles: [QA-SDET, Staff-Engineer, Auditor]
 steps: [test_audit]
@@ -388,10 +388,10 @@ Mocking a public symbol leaves that public contract unverified.
 
 ---
 
-## AP-019: Control-Plane Marker Leakage Into Executable Artifacts
+## shared.control-plane-marker-in-executable-artifact: Control-Plane Marker Leakage Into Executable Artifacts
 
 ```yaml
-id: AP-019
+id: shared.control-plane-marker-in-executable-artifact
 title: Control-Plane Marker Leakage Into Executable Artifacts
 roles: [QA-SDET, Coder, Auditor]
 steps: [test_audit, code_audit]
@@ -410,10 +410,10 @@ Protocol tags belong in chat or trace artifacts, not raw executable content.
 
 ---
 
-## AP-020: Uncovered Defensive Fallback in Closed Branch Logic
+## shared.defensive-fallback-branch-omitted: Uncovered Defensive Fallback in Closed Branch Logic
 
 ```yaml
-id: AP-020
+id: shared.defensive-fallback-branch-omitted
 title: Uncovered Defensive Fallback in Closed Branch Logic
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [test_audit, code_audit]
@@ -431,10 +431,10 @@ Terminal fail-closed branches are contract-bearing even if rare.
 
 ---
 
-## AP-021: Test-Side Invention of Non-Canonical Dependency Surfaces
+## shared.test-invents-noncanonical-dependency: Test-Side Invention of Non-Canonical Dependency Surfaces
 
 ```yaml
-id: AP-021
+id: shared.test-invents-noncanonical-dependency
 title: Test-Side Invention of Non-Canonical Dependency Surfaces
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [test_audit, code_audit]
@@ -452,10 +452,10 @@ Green tests can still be invalid if they require drifted implementation surfaces
 
 ---
 
-## AP-022: Unproven Operational Side-Effect Invariants
+## shared.side-effect-invariant-unproven: Unproven Operational Side-Effect Invariants
 
 ```yaml
-id: AP-022
+id: shared.side-effect-invariant-unproven
 title: Unproven Operational Side-Effect Invariants
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [test_audit, code_audit]
@@ -473,10 +473,10 @@ Payload-only testing does not prove forbidden calls, preservation, or ordering.
 
 ---
 
-## AP-023: Under-Specified Canonical Closure For Operational Observability
+## shared.observability-closure-underspecified: Under-Specified Canonical Closure For Operational Observability
 
 ```yaml
-id: AP-023
+id: shared.observability-closure-underspecified
 title: Under-Specified Canonical Closure For Operational Observability
 roles: [Architect, Staff-Engineer, Coder, Auditor]
 steps: [policy_audit, blueprint_audit, code_audit]
@@ -495,10 +495,10 @@ Repeated downstream oscillation can indicate insufficient source law.
 
 ---
 
-## AP-024: Source-Law Drift From Frozen Upstream APIs And Reachability Closure
+## shared.source-law-uses-nonexistent-upstream-api: Source-Law Drift From Frozen Upstream APIs And Reachability Closure
 
 ```yaml
-id: AP-024
+id: shared.source-law-uses-nonexistent-upstream-api
 title: Source-Law Drift From Frozen Upstream APIs And Reachability Closure
 roles: [Architect, Staff-Engineer, QA-SDET, Auditor]
 steps: [policy_audit, blueprint_audit, test_audit]
@@ -517,10 +517,10 @@ Contradictory or nonexistent upstream contracts are upstream defects.
 
 ---
 
-## AP-025: Transitive Source-Law Dependency In Blueprint Handoffs
+## shared.blueprint-missing-transitive-source-law: Transitive Source-Law Dependency In Blueprint Handoffs
 
 ```yaml
-id: AP-025
+id: shared.blueprint-missing-transitive-source-law
 title: Transitive Source-Law Dependency In Blueprint Handoffs
 roles: [Staff-Engineer, Coder, QA-SDET, Auditor]
 steps: [blueprint_audit, test_audit, code_audit]
@@ -539,10 +539,10 @@ Downstream roles should not read ADR sections to discover normative details.
 
 ---
 
-## AP-026: Unprobed Framework Error Literals In Source Law
+## shared.unprobed-framework-error-literal: Unprobed Framework Error Literals In Source Law
 
 ```yaml
-id: AP-026
+id: shared.unprobed-framework-error-literal
 title: Unprobed Framework Error Literals In Source Law
 roles: [Architect, Staff-Engineer, QA-SDET, Auditor]
 steps: [policy_audit, blueprint_audit, test_audit]
@@ -561,10 +561,10 @@ Framework diagnostics are empirical runtime observables.
 
 ---
 
-## AP-027: Unanchored Import Surface In Pre-Implementation Tests
+## shared.unanchored-import-surface-preimpl-tests: Unanchored Import Surface In Pre-Implementation Tests
 
 ```yaml
-id: AP-027
+id: shared.unanchored-import-surface-preimpl-tests
 title: Unanchored Import Surface In Pre-Implementation Tests
 roles: [Staff-Engineer, QA-SDET, Coder, Auditor]
 steps: [blueprint_audit, test_audit, code_audit]
@@ -583,10 +583,10 @@ Tests cannot invent public module paths.
 
 ---
 
-## AP-028: Non-Falsifying Contract Assertions
+## shared.non-falsifying-contract-assertion: Non-Falsifying Contract Assertions
 
 ```yaml
-id: AP-028
+id: shared.non-falsifying-contract-assertion
 title: Non-Falsifying Contract Assertions
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [test_audit, code_audit]
@@ -604,10 +604,10 @@ Weak assertions are missing coverage, not partial coverage.
 
 ---
 
-## AP-029: Unreachable Mocked Failure Paths
+## shared.unreachable-mocked-failure-path: Unreachable Mocked Failure Paths
 
 ```yaml
-id: AP-029
+id: shared.unreachable-mocked-failure-path
 title: Unreachable Mocked Failure Paths
 roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
 steps: [test_audit, code_audit]
