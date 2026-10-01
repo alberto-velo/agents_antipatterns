@@ -9,7 +9,7 @@ Entries @Auditor must apply when reviewing source law, blueprints, tests, and co
 ```yaml
 id: shared.stateful-component-missing-lifecycle
 title: State Leakage Through Missing Lifecycle Primitives
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
 risk_levels: [2, 3, 4, 5]
 domains: [state, tests, code]
@@ -31,7 +31,7 @@ Persistent task-boundary state must not leak between executions.
 ```yaml
 id: shared.security-metadata-open-type
 title: Semantic Permissiveness in Security Metadata
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
 risk_levels: [4, 5]
 domains: [security, validation]
@@ -52,7 +52,7 @@ Open access-control types can let arbitrary values bypass validation.
 ```yaml
 id: shared.hardening-blocks-authorized-input
 title: Regressive Over-Restriction
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
 risk_levels: [3, 4, 5]
 domains: [security, validation]
@@ -73,7 +73,7 @@ Hardening must account for all legitimate input shapes.
 ```yaml
 id: shared.unspecified-transformation-path
 title: Specification Ambiguity in Transformation Steps
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
 risk_levels: [2, 3, 4, 5]
 domains: [blueprint, transformation]
@@ -94,7 +94,7 @@ Inferred normalization can produce divergent byte sequences or comparisons.
 ```yaml
 id: shared.security-boundary-fail-open
 title: Fail-Open Defaults in Security Boundaries
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
 risk_levels: [4, 5]
 domains: [security, code]
@@ -137,7 +137,7 @@ Masked imports create false green test signals.
 ```yaml
 id: shared.canonical-artifact-path-drift
 title: Canonical Artifact Path Drift
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [blueprint, workflow, manifest]
@@ -159,7 +159,7 @@ Review must not depend on filesystem discovery.
 ```yaml
 id: shared.ghost-coverage-placeholder-tests
 title: Ghost Coverage From Placeholder or Uncollected Tests
-roles: [QA-SDET, Staff-Engineer, Auditor]
+roles: [QA-SDET, Architect, Auditor]
 steps: [test_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests]
@@ -180,7 +180,7 @@ Coverage exists only when collected executable assertions run.
 ```yaml
 id: qa-sdet.test-invents-unlicensed-contract
 title: Test Contract Invention
-roles: [QA-SDET, Staff-Engineer, Auditor]
+roles: [QA-SDET, Architect, Auditor]
 steps: [test_audit]
 risk_levels: [3, 4, 5]
 domains: [tests, source_law]
@@ -201,7 +201,7 @@ Invented test expectations validate local guesses instead of source law.
 ```yaml
 id: qa-sdet.partial-structured-error-assertion
 title: Partial Assertion of Structured Error Contracts
-roles: [QA-SDET, Staff-Engineer, Auditor]
+roles: [QA-SDET, Architect, Auditor]
 steps: [test_audit, code_audit]
 risk_levels: [3, 4, 5]
 domains: [tests, errors]
@@ -222,8 +222,8 @@ Partial assertions can allow payload drift to pass.
 ```yaml
 id: shared.hidden-ambient-dependency-pure-interface
 title: Hidden Ambient Dependencies in Declared Pure Interfaces
-roles: [Architect, Staff-Engineer, Coder, Auditor]
-steps: [policy_audit, blueprint_audit, code_audit]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_audit, code_audit]
 risk_levels: [3, 4, 5]
 domains: [source_law, state]
 triggers: [hidden_state_dependency, false_purity_claim, undeclared_runtime_context]
@@ -243,7 +243,7 @@ Purity claims must match actual runtime dependencies.
 ```yaml
 id: coder.convenience-api-erases-probe-semantics
 title: Fail-Closed Probe Semantics Lost Through Convenience APIs
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
 risk_levels: [4, 5]
 domains: [filesystem, security]
@@ -265,8 +265,8 @@ Missing and failed probes are distinct when source law says so.
 ```yaml
 id: shared.divergent-validators-closed-failure-alphabet
 title: Divergent Validation Layers Behind a Claimed Closed Failure Alphabet
-roles: [Architect, Staff-Engineer, Coder, Auditor]
-steps: [policy_audit, blueprint_audit, code_audit]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_audit, code_audit]
 risk_levels: [4, 5]
 domains: [validation, source_law]
 triggers: [split_validator_semantics, shadow_failure_path, misattributed_failure_literal]
@@ -286,7 +286,7 @@ Later-layer rejection cannot be mislabeled as an unrelated canonical cause.
 ```yaml
 id: shared.blueprint-drift-adds-to-source-law
 title: Additive Blueprint Drift From Canonical Source Law
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
 risk_levels: [4, 5]
 domains: [blueprint, source_law]
@@ -307,7 +307,7 @@ The blueprint must remain the same contract as source law.
 ```yaml
 id: qa-sdet.state-matrix-subcomponent-only-coverage
 title: State-Matrix Coverage Collapse Through Subcomponent-Only Testing
-roles: [QA-SDET, Staff-Engineer, Auditor]
+roles: [QA-SDET, Architect, Auditor]
 steps: [test_audit]
 risk_levels: [4, 5]
 domains: [tests, state]
@@ -328,7 +328,7 @@ Helper tests do not prove entrypoint payload mapping.
 ```yaml
 id: coder.constructor-bypasses-schema-validation
 title: Constructor-Based Schema Validation on Untrusted Rows
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_audit, code_audit]
 risk_levels: [3, 4, 5]
 domains: [validation, schema, code]
@@ -350,8 +350,8 @@ Constructor forms can leak host-language exceptions outside declared channels.
 ```yaml
 id: shared.unreachable-operational-transition-restart
 title: Unreachable Operational Transition From Valid Restart States
-roles: [Architect, Staff-Engineer, Coder, Auditor]
-steps: [policy_audit, blueprint_audit, code_audit]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_audit, code_audit]
 risk_levels: [4, 5]
 domains: [state, lifecycle]
 unit_domains: [agent-infra]
@@ -372,7 +372,7 @@ Every successful bootstrap path needs an explicit transition action.
 ```yaml
 id: shared.mocked-composition-misses-closed-surface
 title: Closed-Surface Coverage Gaps Behind Mocked Composition
-roles: [QA-SDET, Staff-Engineer, Auditor]
+roles: [QA-SDET, Architect, Auditor]
 steps: [test_audit]
 risk_levels: [4, 5]
 domains: [tests, module_surface]
@@ -415,7 +415,7 @@ Protocol tags belong in chat or trace artifacts, not raw executable content.
 ```yaml
 id: shared.defensive-fallback-branch-omitted
 title: Uncovered Defensive Fallback in Closed Branch Logic
-roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
+roles: [QA-SDET, Architect, Coder, Auditor]
 steps: [test_audit, code_audit]
 risk_levels: [4, 5]
 domains: [tests, branch_logic]
@@ -436,7 +436,7 @@ Terminal fail-closed branches are contract-bearing even if rare.
 ```yaml
 id: shared.test-invents-noncanonical-dependency
 title: Test-Side Invention of Non-Canonical Dependency Surfaces
-roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
+roles: [QA-SDET, Architect, Coder, Auditor]
 steps: [test_audit, code_audit]
 risk_levels: [3, 4, 5]
 domains: [tests, imports, dependencies]
@@ -457,7 +457,7 @@ Green tests can still be invalid if they require drifted implementation surfaces
 ```yaml
 id: shared.side-effect-invariant-unproven
 title: Unproven Operational Side-Effect Invariants
-roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
+roles: [QA-SDET, Architect, Coder, Auditor]
 steps: [test_audit, code_audit]
 risk_levels: [4, 5]
 domains: [tests, side_effects, observability]
@@ -478,8 +478,8 @@ Payload-only testing does not prove forbidden calls, preservation, or ordering.
 ```yaml
 id: shared.observability-closure-underspecified
 title: Under-Specified Canonical Closure For Operational Observability
-roles: [Architect, Staff-Engineer, Coder, Auditor]
-steps: [policy_audit, blueprint_audit, code_audit]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_audit, code_audit]
 risk_levels: [4, 5]
 domains: [source_law, observability]
 unit_domains: [agent-infra]
@@ -500,8 +500,8 @@ Repeated downstream oscillation can indicate insufficient source law.
 ```yaml
 id: shared.source-law-uses-nonexistent-upstream-api
 title: Source-Law Drift From Frozen Upstream APIs And Reachability Closure
-roles: [Architect, Staff-Engineer, QA-SDET, Auditor]
-steps: [policy_audit, blueprint_audit, test_audit]
+roles: [Architect, QA-SDET, Auditor]
+steps: [blueprint_audit, test_audit]
 risk_levels: [3, 4, 5]
 domains: [source_law, imports, tests]
 unit_domains: [agent-infra]
@@ -522,20 +522,20 @@ Contradictory or nonexistent upstream contracts are upstream defects.
 ```yaml
 id: shared.blueprint-missing-transitive-source-law
 title: Transitive Source-Law Dependency In Blueprint Handoffs
-roles: [Staff-Engineer, Coder, QA-SDET, Auditor]
+roles: [Architect, Coder, QA-SDET, Auditor]
 steps: [blueprint_audit, test_audit, code_audit]
 risk_levels: [4, 5]
 domains: [blueprint, tests, implementation]
 unit_domains: [agent-infra]
-triggers: [adr_only_test_matrix, transitive_requirement, incomplete_blueprint_handoff]
+triggers: [out_of_blueprint_requirement, transitive_requirement, incomplete_blueprint_handoff]
 summary: Level 4-5 blueprints must be self-contained for Blueprint-bound downstream roles.
 ```
 
 ### Invariant
-Downstream roles should not read ADR sections to discover normative details.
+Downstream roles should not read documents outside the blueprint to discover normative details.
 
 ### Role Guidance
-- @Auditor: Treat transitive ADR dependencies as handoff-closure defects.
+- @Auditor: Treat transitive dependencies on documents outside the blueprint as handoff-closure defects.
 
 ---
 
@@ -544,8 +544,8 @@ Downstream roles should not read ADR sections to discover normative details.
 ```yaml
 id: shared.unprobed-framework-error-literal
 title: Unprobed Framework Error Literals In Source Law
-roles: [Architect, Staff-Engineer, QA-SDET, Auditor]
-steps: [policy_audit, blueprint_audit, test_audit]
+roles: [Architect, QA-SDET, Auditor]
+steps: [blueprint_audit, test_audit]
 risk_levels: [4, 5]
 domains: [source_law, framework, tests]
 unit_domains: [agent-infra]
@@ -566,7 +566,7 @@ Framework diagnostics are empirical runtime observables.
 ```yaml
 id: shared.unanchored-import-surface-preimpl-tests
 title: Unanchored Import Surface In Pre-Implementation Tests
-roles: [Staff-Engineer, QA-SDET, Coder, Auditor]
+roles: [Architect, QA-SDET, Coder, Auditor]
 steps: [blueprint_audit, test_audit, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests, imports, blueprint]
@@ -588,7 +588,7 @@ Tests cannot invent public module paths.
 ```yaml
 id: shared.non-falsifying-contract-assertion
 title: Non-Falsifying Contract Assertions
-roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
+roles: [QA-SDET, Architect, Coder, Auditor]
 steps: [test_audit, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests, code, cli, workflow]
@@ -609,7 +609,7 @@ Weak assertions are missing coverage, not partial coverage.
 ```yaml
 id: shared.unreachable-mocked-failure-path
 title: Unreachable Mocked Failure Paths
-roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
+roles: [QA-SDET, Architect, Coder, Auditor]
 steps: [test_audit, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests, mocks, cli]

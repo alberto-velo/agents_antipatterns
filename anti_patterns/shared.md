@@ -9,7 +9,7 @@ Cross-role entries that protect workflow integrity across multiple agents.
 ```yaml
 id: shared.canonical-artifact-path-drift
 title: Canonical Artifact Path Drift
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [blueprint, workflow, manifest]
@@ -23,7 +23,7 @@ Pipeline artifacts that serve as handoff contracts must be discoverable at a
 single canonical path.
 
 ### Role Guidance
-- @Staff-Engineer: Store blueprints under the canonical unit directory.
+- @Architect: Store blueprints under the canonical unit directory.
 - @Coder: Do not implement from discovered-by-search blueprint fragments.
 - @Auditor: Treat review-by-filesystem-discovery as a traceability defect.
 

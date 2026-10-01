@@ -31,7 +31,7 @@ Core implementation imports must not be wrapped in `try/except ImportError`.
 ```yaml
 id: shared.ghost-coverage-placeholder-tests
 title: Ghost Coverage From Placeholder or Uncollected Tests
-roles: [QA-SDET, Staff-Engineer, Auditor]
+roles: [QA-SDET, Architect, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests, blueprint]
@@ -53,7 +53,7 @@ tests are missing coverage.
 ```yaml
 id: qa-sdet.test-invents-unlicensed-contract
 title: Test Contract Invention
-roles: [QA-SDET, Staff-Engineer, Auditor]
+roles: [QA-SDET, Architect, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft]
 risk_levels: [3, 4, 5]
 domains: [tests, blueprint, source_law]
@@ -75,7 +75,7 @@ the blueprint or approved upstream behavior.
 ```yaml
 id: qa-sdet.partial-structured-error-assertion
 title: Partial Assertion of Structured Error Contracts
-roles: [QA-SDET, Staff-Engineer, Auditor]
+roles: [QA-SDET, Architect, Auditor]
 steps: [test_authoring, test_audit, code_audit]
 risk_levels: [3, 4, 5]
 domains: [tests, errors]
@@ -96,7 +96,7 @@ Checking one convenient field can let non-verbatim error translations pass.
 ```yaml
 id: qa-sdet.state-matrix-subcomponent-only-coverage
 title: State-Matrix Coverage Collapse Through Subcomponent-Only Testing
-roles: [QA-SDET, Staff-Engineer, Auditor]
+roles: [QA-SDET, Architect, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft]
 risk_levels: [4, 5]
 domains: [tests, state]
@@ -118,7 +118,7 @@ state-bearing payload.
 ```yaml
 id: shared.mocked-composition-misses-closed-surface
 title: Closed-Surface Coverage Gaps Behind Mocked Composition
-roles: [QA-SDET, Staff-Engineer, Auditor]
+roles: [QA-SDET, Architect, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft]
 risk_levels: [4, 5]
 domains: [tests, module_surface]
@@ -163,7 +163,7 @@ language comments.
 ```yaml
 id: shared.defensive-fallback-branch-omitted
 title: Uncovered Defensive Fallback in Closed Branch Logic
-roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
+roles: [QA-SDET, Architect, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
 risk_levels: [4, 5]
 domains: [tests, branch_logic]
@@ -185,7 +185,7 @@ still exists.
 ```yaml
 id: shared.test-invents-noncanonical-dependency
 title: Test-Side Invention of Non-Canonical Dependency Surfaces
-roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
+roles: [QA-SDET, Architect, Coder, Auditor]
 steps: [test_authoring, test_audit, implementation, code_audit]
 risk_levels: [3, 4, 5]
 domains: [tests, imports, dependencies]
@@ -207,7 +207,7 @@ implementation to drift.
 ```yaml
 id: shared.side-effect-invariant-unproven
 title: Unproven Operational Side-Effect Invariants
-roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
+roles: [QA-SDET, Architect, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
 risk_levels: [4, 5]
 domains: [tests, side_effects, observability]
@@ -229,8 +229,8 @@ alert ordering.
 ```yaml
 id: shared.source-law-uses-nonexistent-upstream-api
 title: Source-Law Drift From Frozen Upstream APIs And Reachability Closure
-roles: [Architect, Staff-Engineer, QA-SDET, Auditor]
-steps: [adr_draft, policy_audit, blueprint_draft, test_authoring, test_audit]
+roles: [Architect, QA-SDET, Auditor]
+steps: [blueprint_draft, test_authoring, test_audit]
 risk_levels: [3, 4, 5]
 domains: [source_law, imports, tests]
 unit_domains: [agent-infra]
@@ -251,20 +251,20 @@ QA must not invent compatibility shims for impossible imports or unreachable row
 ```yaml
 id: shared.blueprint-missing-transitive-source-law
 title: Transitive Source-Law Dependency In Blueprint Handoffs
-roles: [Staff-Engineer, Coder, QA-SDET, Auditor]
+roles: [Architect, Coder, QA-SDET, Auditor]
 steps: [blueprint_draft, blueprint_audit, test_authoring, test_audit, implementation]
 risk_levels: [4, 5]
 domains: [blueprint, tests, implementation]
 unit_domains: [agent-infra]
-triggers: [adr_only_test_matrix, transitive_requirement, incomplete_blueprint_handoff]
-summary: Blueprint-bound roles must not need ADR sections to discover normative test or implementation details.
+triggers: [out_of_blueprint_requirement, transitive_requirement, incomplete_blueprint_handoff]
+summary: Blueprint-bound roles must not need documents outside the blueprint to discover normative test or implementation details.
 ```
 
 ### Invariant
 A Level 4-5 blueprint must be self-contained for Coder and QA.
 
 ### Role Guidance
-- @QA-SDET: Halt rather than deriving tests from ADR-only matrices or literals.
+- @QA-SDET: Halt rather than deriving tests from out-of-blueprint matrices or literals.
 
 ---
 
@@ -273,8 +273,8 @@ A Level 4-5 blueprint must be self-contained for Coder and QA.
 ```yaml
 id: shared.unprobed-framework-error-literal
 title: Unprobed Framework Error Literals In Source Law
-roles: [Architect, Staff-Engineer, QA-SDET, Auditor]
-steps: [adr_draft, policy_audit, blueprint_draft, test_authoring, test_audit]
+roles: [Architect, QA-SDET, Auditor]
+steps: [blueprint_draft, test_authoring, test_audit]
 risk_levels: [4, 5]
 domains: [source_law, framework, tests]
 unit_domains: [agent-infra]
@@ -295,7 +295,7 @@ Framework diagnostic literals must be probed before QA is asked to assert them.
 ```yaml
 id: shared.unanchored-import-surface-preimpl-tests
 title: Unanchored Import Surface In Pre-Implementation Tests
-roles: [Staff-Engineer, QA-SDET, Coder, Auditor]
+roles: [Architect, QA-SDET, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, test_authoring, test_audit, implementation]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests, imports, blueprint]
@@ -317,7 +317,7 @@ QA cannot write executable public-surface tests without an approved import chann
 ```yaml
 id: shared.non-falsifying-contract-assertion
 title: Non-Falsifying Contract Assertions
-roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
+roles: [QA-SDET, Architect, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests, cli, workflow]
@@ -338,7 +338,7 @@ Asserting that something returned or still exists is not contract coverage.
 ```yaml
 id: shared.unreachable-mocked-failure-path
 title: Unreachable Mocked Failure Paths
-roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
+roles: [QA-SDET, Architect, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests, mocks, cli]
