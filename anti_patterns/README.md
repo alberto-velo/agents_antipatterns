@@ -8,12 +8,12 @@ these files and injects relevant entries into agent handoffs.
 
 | File | Consumer |
 | :--- | :--- |
+| `roadmap.md` | @Roadmap |
+| `risk.md` | @Risk |
 | `architect.md` | @Architect |
-| `staff-engineer.md` | @Staff-Engineer |
 | `coder.md` | @Coder |
 | `auditor.md` | @Auditor |
 | `qa-sdet.md` | @QA-SDET |
-| `recorder.md` | @Recorder |
 | `shared.md` | Cross-role — all agents |
 
 Entries appear in more than one role file when the same invariant has different

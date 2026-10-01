@@ -2,8 +2,8 @@
 
 Shared anti-pattern knowledge base for the [Nexus Swarm](https://github.com/alberto-velo/agentic-infra) agent pipeline.
 
-The Nexus Swarm runs AI agents (Architect, Staff-Engineer, Auditor, Coder, QA-SDET, Recorder)
-to assist with feature development. During each run, the Auditor logs reusable root causes it
+The Nexus Swarm runs one AI agent per pipeline step (Roadmap Agent, Risk Agent, Architect,
+Auditor, QA-SDET, Coder) to assist with feature development. During each run, the Auditor logs reusable root causes it
 encounters. This repo is where those patterns accumulate, get reviewed, and propagate to the
 whole team.
 
@@ -12,12 +12,13 @@ whole team.
 ## How it works
 
 1. **Auditor proposes** — during an audit step, if the Auditor finds a reusable root cause
-   it appends a candidate entry to `proposed_anti_patterns.md` in the local workspace.
+   it calls its `propose_anti_pattern` tool, and the runner appends the candidate entry to
+   `proposed_anti_patterns.md` in the local workspace.
 2. **`nexus complete` batches the proposals** — at the end of a feature run, the runner
    prints instructions to open a PR against this repo with the new entries.
 3. **Human reviews** — a team member reads the PR, edits or rejects noisy entries, and merges.
 4. **Rules propagate** — on the next `nexus bootstrap`, the runner pulls the latest commit
-   from this repo and injects the anti-patterns into every audit step's dispatch context.
+   from this repo and injects the entries relevant to each agent step into that step's handoff.
 
 No rule takes effect until it is merged. Unreviewed auto-learning never reaches the pipeline.
 
@@ -27,17 +28,18 @@ No rule takes effect until it is merged. Unreviewed auto-learning never reaches 
 
 ```
 anti_patterns/
-  architect.md         ← patterns for the Architect agent
-  staff-engineer.md    ← patterns for the Staff-Engineer agent
-  coder.md             ← patterns for the Coder agent
-  auditor.md           ← patterns for the Auditor agent
-  qa-sdet.md           ← patterns for the QA-SDET agent
-  recorder.md          ← patterns for the Recorder agent
+  roadmap.md           ← patterns for the Roadmap Agent (roadmap_draft)
+  risk.md              ← patterns for the Risk Agent (risk_classification)
+  architect.md         ← patterns for the Architect (blueprint_draft)
+  auditor.md           ← patterns for the Auditor (blueprint_audit, test_audit, code_audit)
+  qa-sdet.md           ← patterns for QA-SDET (test_authoring)
+  coder.md             ← patterns for the Coder (implementation)
   shared.md            ← cross-role patterns
 CHANGELOG.md           ← record of significant rule changes
 ```
 
-One file per agent role. An entry may appear in more than one role file when the same
+One file per agent role; the runner reads exactly these files and refuses a registry that
+still has the old `staff-engineer.md`. An entry may appear in more than one role file when the same
 invariant has different role-specific guidance — IDs remain stable across files.
 
 ---
@@ -79,7 +81,7 @@ See `anti_patterns/README.md` for the full field reference and validation instru
 
 If you spot a recurring pattern that isn't being caught, you can add it directly:
 
-1. Open the relevant `anti_patterns/<stack>.yaml` (or create a new file for a new stack).
+1. Open the relevant `anti_patterns/<role>.md` (or `shared.md` for a cross-role rule).
 2. Add an entry following the format above.
 3. Open a PR — title: `feat(antipatterns): add <id>`.
 4. Get a single teammate approval and merge.

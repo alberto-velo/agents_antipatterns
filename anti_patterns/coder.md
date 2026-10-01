@@ -9,7 +9,7 @@ Entries @Coder must apply during implementation.
 ```yaml
 id: shared.stateful-component-missing-lifecycle
 title: State Leakage Through Missing Lifecycle Primitives
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
 risk_levels: [2, 3, 4, 5]
 domains: [state, implementation, tests]
@@ -31,7 +31,7 @@ Stateful storage must provide clean-slate semantics.
 ```yaml
 id: shared.security-metadata-open-type
 title: Semantic Permissiveness in Security Metadata
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
 risk_levels: [4, 5]
 domains: [security, validation, implementation]
@@ -52,7 +52,7 @@ Bare `str` or unbounded `int` fields in access paths allow poisoning.
 ```yaml
 id: shared.hardening-blocks-authorized-input
 title: Regressive Over-Restriction
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
 risk_levels: [3, 4, 5]
 domains: [security, validation, implementation]
@@ -73,7 +73,7 @@ Tightened validation is a regression if it blocks source-law-sanctioned values.
 ```yaml
 id: shared.unspecified-transformation-path
 title: Specification Ambiguity in Transformation Steps
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
 risk_levels: [2, 3, 4, 5]
 domains: [transformation, serialization, implementation]
@@ -94,7 +94,7 @@ Different inferred normalization steps can produce different bytes or comparison
 ```yaml
 id: shared.security-boundary-fail-open
 title: Fail-Open Defaults in Security Boundaries
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
 risk_levels: [4, 5]
 domains: [security, implementation]
@@ -115,8 +115,8 @@ Exceptions and default paths in security code must not lead to allow/pass-throug
 ```yaml
 id: shared.hidden-ambient-dependency-pure-interface
 title: Hidden Ambient Dependencies in Declared Pure Interfaces
-roles: [Architect, Staff-Engineer, Coder, Auditor]
-steps: [adr_draft, policy_audit, blueprint_draft, implementation, code_audit]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
 risk_levels: [3, 4, 5]
 domains: [state, implementation, source_law]
 triggers: [hidden_state_dependency, false_purity_claim, undeclared_runtime_context]
@@ -136,7 +136,7 @@ Behavior-changing inputs must be declared.
 ```yaml
 id: coder.convenience-api-erases-probe-semantics
 title: Fail-Closed Probe Semantics Lost Through Convenience APIs
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
 risk_levels: [4, 5]
 domains: [filesystem, implementation, security]
@@ -158,8 +158,8 @@ Missing artifact and failed probe are distinct outcomes when source law says so.
 ```yaml
 id: shared.divergent-validators-closed-failure-alphabet
 title: Divergent Validation Layers Behind a Claimed Closed Failure Alphabet
-roles: [Architect, Staff-Engineer, Coder, Auditor]
-steps: [adr_draft, policy_audit, blueprint_draft, implementation, code_audit]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
 risk_levels: [4, 5]
 domains: [validation, implementation, source_law]
 triggers: [split_validator_semantics, shadow_failure_path, misattributed_failure_literal]
@@ -179,7 +179,7 @@ Later schema rejection cannot be hidden behind a misleading canonical literal.
 ```yaml
 id: shared.blueprint-drift-adds-to-source-law
 title: Additive Blueprint Drift From Canonical Source Law
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
 risk_levels: [4, 5]
 domains: [blueprint, implementation, source_law]
@@ -200,7 +200,7 @@ Stricter-looking additions can still be wrong if they diverge from source law.
 ```yaml
 id: coder.constructor-bypasses-schema-validation
 title: Constructor-Based Schema Validation on Untrusted Rows
-roles: [Staff-Engineer, Coder, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
 risk_levels: [3, 4, 5]
 domains: [validation, implementation, schema]
@@ -222,8 +222,8 @@ summary: Arbitrary decoded input must use schema validation APIs that preserve d
 ```yaml
 id: shared.unreachable-operational-transition-restart
 title: Unreachable Operational Transition From Valid Restart States
-roles: [Architect, Staff-Engineer, Coder, Auditor]
-steps: [adr_draft, policy_audit, blueprint_draft, implementation, code_audit]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
 risk_levels: [4, 5]
 domains: [state, lifecycle, implementation]
 unit_domains: [agent-infra]
@@ -244,7 +244,7 @@ Valid restart paths must have explicit operational transition actions.
 ```yaml
 id: shared.defensive-fallback-branch-omitted
 title: Uncovered Defensive Fallback in Closed Branch Logic
-roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
+roles: [QA-SDET, Architect, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
 risk_levels: [4, 5]
 domains: [implementation, branch_logic, tests]
@@ -265,7 +265,7 @@ Fallback branches remain normative even if upstream validation usually rejects b
 ```yaml
 id: shared.test-invents-noncanonical-dependency
 title: Test-Side Invention of Non-Canonical Dependency Surfaces
-roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
+roles: [QA-SDET, Architect, Coder, Auditor]
 steps: [test_authoring, test_audit, implementation, code_audit]
 risk_levels: [3, 4, 5]
 domains: [tests, imports, implementation]
@@ -286,7 +286,7 @@ Tests do not amend the blueprint or upstream API.
 ```yaml
 id: shared.side-effect-invariant-unproven
 title: Unproven Operational Side-Effect Invariants
-roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
+roles: [QA-SDET, Architect, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
 risk_levels: [4, 5]
 domains: [implementation, tests, side_effects]
@@ -307,8 +307,8 @@ Payload correctness does not prove forbidden calls, ordering, or preserved side 
 ```yaml
 id: shared.observability-closure-underspecified
 title: Under-Specified Canonical Closure For Operational Observability
-roles: [Architect, Staff-Engineer, Coder, Auditor]
-steps: [adr_draft, policy_audit, blueprint_draft, blueprint_audit, implementation, code_audit]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
 risk_levels: [4, 5]
 domains: [implementation, observability, source_law]
 unit_domains: [agent-infra]
@@ -329,20 +329,20 @@ Mandatory side effects need a legal implementation and observation path.
 ```yaml
 id: shared.blueprint-missing-transitive-source-law
 title: Transitive Source-Law Dependency In Blueprint Handoffs
-roles: [Staff-Engineer, Coder, QA-SDET, Auditor]
+roles: [Architect, Coder, QA-SDET, Auditor]
 steps: [blueprint_draft, blueprint_audit, test_authoring, test_audit, implementation]
 risk_levels: [4, 5]
 domains: [blueprint, implementation, tests]
 unit_domains: [agent-infra]
-triggers: [adr_only_test_matrix, transitive_requirement, incomplete_blueprint_handoff]
-summary: Coder and QA must be able to execute from the blueprint without chasing ADR-only requirements.
+triggers: [out_of_blueprint_requirement, transitive_requirement, incomplete_blueprint_handoff]
+summary: Coder and QA must be able to execute from the blueprint without chasing out-of-blueprint requirements.
 ```
 
 ### Invariant
-Blueprint-bound roles must not discover normative obligations by reading ADR sections.
+Blueprint-bound roles must not discover normative obligations by reading documents outside the blueprint.
 
 ### Role Guidance
-- @Coder: Request blueprint revision when implementation behavior is only referenced by ADR section.
+- @Coder: Request blueprint revision when implementation behavior is only referenced by documents outside the blueprint.
 
 ---
 
@@ -351,7 +351,7 @@ Blueprint-bound roles must not discover normative obligations by reading ADR sec
 ```yaml
 id: shared.unanchored-import-surface-preimpl-tests
 title: Unanchored Import Surface In Pre-Implementation Tests
-roles: [Staff-Engineer, QA-SDET, Coder, Auditor]
+roles: [Architect, QA-SDET, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit, test_authoring, test_audit, implementation]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests, imports, implementation]
@@ -373,7 +373,7 @@ Pre-implementation tests cannot impose an unauthorized public import channel.
 ```yaml
 id: shared.non-falsifying-contract-assertion
 title: Non-Falsifying Contract Assertions
-roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
+roles: [QA-SDET, Architect, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests, implementation, cli]
@@ -394,7 +394,7 @@ Implementation must satisfy the blueprint, not merely the weakest passing assert
 ```yaml
 id: shared.unreachable-mocked-failure-path
 title: Unreachable Mocked Failure Paths
-roles: [QA-SDET, Staff-Engineer, Coder, Auditor]
+roles: [QA-SDET, Architect, Coder, Auditor]
 steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests, implementation, mocks]
