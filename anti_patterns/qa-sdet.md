@@ -135,29 +135,6 @@ symbol's own contract.
 
 ---
 
-## shared.control-plane-marker-in-executable-artifact: Control-Plane Marker Leakage Into Executable Artifacts
-
-```yaml
-id: shared.control-plane-marker-in-executable-artifact
-title: Control-Plane Marker Leakage Into Executable Artifacts
-roles: [QA-SDET, Coder, Auditor]
-steps: [test_authoring, test_audit, implementation, code_audit]
-risk_levels: [1, 2, 3, 4, 5]
-domains: [tests, code, workflow]
-unit_domains: [agent-infra]
-triggers: [raw_agent_marker, raw_verdict_marker, syntax_breaking_metadata]
-summary: Workflow headers and verdict tags must not appear as raw executable source content.
-```
-
-### Invariant
-Protocol tags belong in chat or trace artifacts unless represented as valid
-language comments.
-
-### Role Guidance
-- @QA-SDET: Never paste raw agent protocol headers or verdict footers into test modules.
-
----
-
 ## shared.defensive-fallback-branch-omitted: Uncovered Defensive Fallback in Closed Branch Logic
 
 ```yaml

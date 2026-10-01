@@ -388,28 +388,6 @@ Mocking a public symbol leaves that public contract unverified.
 
 ---
 
-## shared.control-plane-marker-in-executable-artifact: Control-Plane Marker Leakage Into Executable Artifacts
-
-```yaml
-id: shared.control-plane-marker-in-executable-artifact
-title: Control-Plane Marker Leakage Into Executable Artifacts
-roles: [QA-SDET, Coder, Auditor]
-steps: [test_audit, code_audit]
-risk_levels: [1, 2, 3, 4, 5]
-domains: [tests, code, workflow]
-unit_domains: [agent-infra]
-triggers: [raw_agent_marker, raw_verdict_marker, syntax_breaking_metadata]
-summary: Raw workflow control markers in executable files are syntax-breaking artifact leakage.
-```
-
-### Invariant
-Protocol tags belong in chat or trace artifacts, not raw executable content.
-
-### Role Guidance
-- @Auditor: Scan executable artifact boundaries for raw `[AGENT:]` or `[VERDICT:]`.
-
----
-
 ## shared.defensive-fallback-branch-omitted: Uncovered Defensive Fallback in Closed Branch Logic
 
 ```yaml
