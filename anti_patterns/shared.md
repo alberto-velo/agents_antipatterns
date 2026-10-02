@@ -26,4 +26,3 @@ single canonical path.
 - @Architect: Store blueprints under the canonical unit directory.
 - @Coder: Do not implement from discovered-by-search blueprint fragments.
 - @Auditor: Treat review-by-filesystem-discovery as a traceability defect.
-

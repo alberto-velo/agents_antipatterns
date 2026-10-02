@@ -244,8 +244,8 @@ Valid restart paths must have explicit operational transition actions.
 ```yaml
 id: shared.defensive-fallback-branch-omitted
 title: Uncovered Defensive Fallback in Closed Branch Logic
-roles: [QA-SDET, Architect, Coder, Auditor]
-steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
+roles: [Coder, Architect, Auditor]
+steps: [implementation, code_audit, blueprint_draft]
 risk_levels: [4, 5]
 domains: [implementation, branch_logic, tests]
 triggers: [missing_defensive_fallback_test, untested_error_literal, total_function_gap]
@@ -257,6 +257,7 @@ Fallback branches remain normative even if upstream validation usually rejects b
 
 ### Role Guidance
 - @Coder: Do not optimize away blueprint-declared fallback branches.
+- @Coder (writing the tests): Reach the fallback with invalid input and assert the exact literal or payload.
 
 ---
 
@@ -265,10 +266,10 @@ Fallback branches remain normative even if upstream validation usually rejects b
 ```yaml
 id: shared.test-invents-noncanonical-dependency
 title: Test-Side Invention of Non-Canonical Dependency Surfaces
-roles: [QA-SDET, Architect, Coder, Auditor]
-steps: [test_authoring, test_audit, implementation, code_audit]
+roles: [Coder, Architect, Auditor]
+steps: [implementation, code_audit]
 risk_levels: [3, 4, 5]
-domains: [tests, imports, implementation]
+domains: [tests, imports, implementation, dependencies]
 triggers: [invented_fixture_constructor, undeclared_patch_target, noncanonical_dependency_surface]
 summary: Do not add implementation shims solely to satisfy invented test-side dependency surfaces.
 ```
@@ -278,6 +279,7 @@ Tests do not amend the blueprint or upstream API.
 
 ### Role Guidance
 - @Coder: Record a discrepancy instead of adding undeclared helpers or aliases.
+- @Coder (writing the tests): Instantiate upstream types and patch side-effect channels exactly as declared.
 
 ---
 
@@ -286,10 +288,10 @@ Tests do not amend the blueprint or upstream API.
 ```yaml
 id: shared.side-effect-invariant-unproven
 title: Unproven Operational Side-Effect Invariants
-roles: [QA-SDET, Architect, Coder, Auditor]
-steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
+roles: [Coder, Architect, Auditor]
+steps: [implementation, code_audit, blueprint_draft]
 risk_levels: [4, 5]
-domains: [implementation, tests, side_effects]
+domains: [implementation, tests, side_effects, observability]
 triggers: [missing_negative_call_assertion, missing_order_assertion, unproven_side_effect]
 summary: Green tests that omit operational side-effect proof do not close the implementation contract.
 ```
@@ -299,6 +301,7 @@ Payload correctness does not prove forbidden calls, ordering, or preserved side 
 
 ### Role Guidance
 - @Coder: Implement the blueprint even when tests prove only a weaker signal.
+- @Coder (writing the tests): Assert side effects directly instead of inferring them from return values.
 
 ---
 
@@ -329,13 +332,13 @@ Mandatory side effects need a legal implementation and observation path.
 ```yaml
 id: shared.blueprint-missing-transitive-source-law
 title: Transitive Source-Law Dependency In Blueprint Handoffs
-roles: [Architect, Coder, QA-SDET, Auditor]
-steps: [blueprint_draft, blueprint_audit, test_authoring, test_audit, implementation]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
 risk_levels: [4, 5]
 domains: [blueprint, implementation, tests]
 unit_domains: [agent-infra]
 triggers: [out_of_blueprint_requirement, transitive_requirement, incomplete_blueprint_handoff]
-summary: Coder and QA must be able to execute from the blueprint without chasing out-of-blueprint requirements.
+summary: The Coder must be able to write the tests and the code from the blueprint without chasing out-of-blueprint requirements.
 ```
 
 ### Invariant
@@ -343,6 +346,7 @@ Blueprint-bound roles must not discover normative obligations by reading documen
 
 ### Role Guidance
 - @Coder: Request blueprint revision when implementation behavior is only referenced by documents outside the blueprint.
+- @Coder (writing the tests): Halt rather than deriving tests from out-of-blueprint matrices or literals.
 
 ---
 
@@ -351,10 +355,10 @@ Blueprint-bound roles must not discover normative obligations by reading documen
 ```yaml
 id: shared.unanchored-import-surface-preimpl-tests
 title: Unanchored Import Surface In Pre-Implementation Tests
-roles: [Architect, QA-SDET, Coder, Auditor]
-steps: [blueprint_draft, blueprint_audit, test_authoring, test_audit, implementation]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
-domains: [tests, imports, implementation]
+domains: [tests, imports, implementation, blueprint]
 unit_domains: [agent-infra]
 triggers: [missing_import_binding, invented_module_path, unauthorized_test_import]
 summary: Do not treat an invented test import path as an implicit blueprint amendment.
@@ -365,6 +369,7 @@ Pre-implementation tests cannot impose an unauthorized public import channel.
 
 ### Role Guidance
 - @Coder: Implement the blueprint surface and record the binding discrepancy.
+- @Coder (writing the tests): Do not invent module paths; finish BLOCKED with the gap.
 
 ---
 
@@ -373,10 +378,10 @@ Pre-implementation tests cannot impose an unauthorized public import channel.
 ```yaml
 id: shared.non-falsifying-contract-assertion
 title: Non-Falsifying Contract Assertions
-roles: [QA-SDET, Architect, Coder, Auditor]
-steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
+roles: [Coder, Architect, Auditor]
+steps: [implementation, code_audit, blueprint_draft]
 risk_levels: [1, 2, 3, 4, 5]
-domains: [tests, implementation, cli]
+domains: [tests, implementation, cli, workflow]
 triggers: [weak_assertion, non_falsifying_test, generic_failure]
 summary: Do not treat weak green tests as proof that the blueprint obligation is satisfied.
 ```
@@ -386,6 +391,7 @@ Implementation must satisfy the blueprint, not merely the weakest passing assert
 
 ### Role Guidance
 - @Coder: Implement the required behavior even if approved tests would miss its absence.
+- @Coder (writing the tests): Name the observable signal and the plausible broken implementation each test catches.
 
 ---
 
@@ -394,10 +400,10 @@ Implementation must satisfy the blueprint, not merely the weakest passing assert
 ```yaml
 id: shared.unreachable-mocked-failure-path
 title: Unreachable Mocked Failure Paths
-roles: [QA-SDET, Architect, Coder, Auditor]
-steps: [test_authoring, test_audit, blueprint_draft, implementation, code_audit]
+roles: [Coder, Architect, Auditor]
+steps: [implementation, code_audit, blueprint_draft]
 risk_levels: [1, 2, 3, 4, 5]
-domains: [tests, implementation, mocks]
+domains: [tests, implementation, mocks, cli]
 triggers: [unreached_mock, earlier_parser_failure, uncalled_patch]
 summary: A green test that fails before the patched dependency does not prove downstream failure handling.
 ```
@@ -407,3 +413,179 @@ Mocked branch coverage requires valid preceding inputs and proof the mock was re
 
 ### Role Guidance
 - @Coder: Do not infer downstream failure handling is covered by tests that never reach the dependency.
+- @Coder (writing the tests): Use valid preceding inputs and assert the patched dependency was called.
+
+---
+
+## coder.import-masking-hides-failure: Import Masking in Test Suites
+
+```yaml
+id: coder.import-masking-hides-failure
+title: Import Masking in Test Suites
+roles: [Coder, Auditor]
+steps: [implementation, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [tests, imports]
+unit_domains: [agent-infra]
+triggers: [import_masking, false_green_tests, hidden_import_failure]
+summary: Tests must fail loudly when implementation imports are missing or broken.
+```
+
+### Invariant
+Core implementation imports must not be wrapped in `try/except ImportError`.
+
+### Role Guidance
+- @Coder (writing the tests): Use direct imports so missing implementation fails collection.
+
+---
+
+## shared.ghost-coverage-placeholder-tests: Ghost Coverage From Placeholder or Uncollected Tests
+
+```yaml
+id: shared.ghost-coverage-placeholder-tests
+title: Ghost Coverage From Placeholder or Uncollected Tests
+roles: [Coder, Architect, Auditor]
+steps: [implementation, code_audit, blueprint_draft]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [tests, blueprint]
+triggers: [placeholder_test, uncollected_test, empty_assertion]
+summary: Tests only count when executable assertions are collected and exercise the claimed contract.
+```
+
+### Invariant
+`pass`, TODO-only bodies, comments, skipped placeholders, and nested uncollected
+tests are missing coverage.
+
+### Role Guidance
+- @Coder (writing the tests): Map every required public-surface or mandatory assertion item to an executable assertion.
+
+---
+
+## coder.test-invents-unlicensed-contract: Test Contract Invention
+
+```yaml
+id: coder.test-invents-unlicensed-contract
+title: Test Contract Invention
+roles: [Coder, Architect, Auditor]
+steps: [implementation, code_audit, blueprint_draft]
+risk_levels: [3, 4, 5]
+domains: [tests, blueprint, source_law]
+triggers: [invented_error_literal, invented_route, unsourced_expected_output]
+summary: Tests must derive asserted literals and branches from the approved contract, not local guesses.
+```
+
+### Invariant
+High-risk tests validate source law only when asserted outcomes trace back to
+the blueprint or approved upstream behavior.
+
+### Role Guidance
+- @Coder (writing the tests): Do not invent error codes, route strings, helper names, or contract literals.
+
+---
+
+## coder.partial-structured-error-assertion: Partial Assertion of Structured Error Contracts
+
+```yaml
+id: coder.partial-structured-error-assertion
+title: Partial Assertion of Structured Error Contracts
+roles: [Coder, Architect, Auditor]
+steps: [implementation, code_audit]
+risk_levels: [3, 4, 5]
+domains: [tests, errors]
+triggers: [partial_error_assertion, incomplete_payload_check, structured_exception_drift]
+summary: When the contract defines structured errors, tests must assert all contract-bearing fields.
+```
+
+### Invariant
+Checking one convenient field can let non-verbatim error translations pass.
+
+### Role Guidance
+- @Coder (writing the tests): Assert every field or argument that distinguishes compliance from partial implementation.
+
+---
+
+## coder.state-matrix-subcomponent-only-coverage: State-Matrix Coverage Collapse Through Subcomponent-Only Testing
+
+```yaml
+id: coder.state-matrix-subcomponent-only-coverage
+title: State-Matrix Coverage Collapse Through Subcomponent-Only Testing
+roles: [Coder, Architect, Auditor]
+steps: [implementation, code_audit, blueprint_draft]
+risk_levels: [4, 5]
+domains: [tests, state]
+triggers: [helper_only_coverage, missing_entrypoint_row, state_matrix_gap]
+summary: Closed state matrix rows must be tested at the owning public entrypoint.
+```
+
+### Invariant
+Helper-level validation does not prove the entrypoint emits the required
+state-bearing payload.
+
+### Role Guidance
+- @Coder (writing the tests): Add entrypoint-level tests for every externally observable state row.
+
+---
+
+## shared.mocked-composition-misses-closed-surface: Closed-Surface Coverage Gaps Behind Mocked Composition
+
+```yaml
+id: shared.mocked-composition-misses-closed-surface
+title: Closed-Surface Coverage Gaps Behind Mocked Composition
+roles: [Coder, Architect, Auditor]
+steps: [implementation, code_audit, blueprint_draft]
+risk_levels: [4, 5]
+domains: [tests, module_surface]
+triggers: [mocked_public_symbol, untested_public_api, closed_surface_gap]
+summary: Every public symbol in a closed surface needs direct executable coverage.
+```
+
+### Invariant
+An entrypoint test that mocks a public dependency does not verify that mocked
+symbol's own contract.
+
+### Role Guidance
+- @Coder (writing the tests): Build a public-symbol checklist before expanding into matrix coverage.
+
+---
+
+## shared.source-law-uses-nonexistent-upstream-api: Source-Law Drift From Frozen Upstream APIs And Reachability Closure
+
+```yaml
+id: shared.source-law-uses-nonexistent-upstream-api
+title: Source-Law Drift From Frozen Upstream APIs And Reachability Closure
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
+risk_levels: [3, 4, 5]
+domains: [source_law, imports, tests]
+unit_domains: [agent-infra]
+triggers: [nonexistent_upstream_import, contradictory_reachability, impossible_test_row]
+summary: Source law that composes frozen units must use shipped APIs and require only reachable test rows.
+```
+
+### Invariant
+The tests must not invent compatibility shims for impossible imports or unreachable rows.
+
+### Role Guidance
+- @Coder (writing the tests): Treat impossible imports and contradictory reachability as upstream defects.
+
+---
+
+## shared.unprobed-framework-error-literal: Unprobed Framework Error Literals In Source Law
+
+```yaml
+id: shared.unprobed-framework-error-literal
+title: Unprobed Framework Error Literals In Source Law
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
+risk_levels: [4, 5]
+domains: [source_law, framework, tests]
+unit_domains: [agent-infra]
+triggers: [unverified_framework_literal, unreachable_diagnostic, pydantic_error_drift]
+summary: Exact framework diagnostics made normative must be empirically verified against the project runtime.
+```
+
+### Invariant
+Framework diagnostic literals must be probed before the tests are asked to assert them.
+
+### Role Guidance
+- @Coder (writing the tests): Test exact framework diagnostics verbatim; a runtime mismatch is a source-law defect — finish BLOCKED with it.
