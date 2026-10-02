@@ -13,7 +13,6 @@ these files and injects relevant entries into agent handoffs.
 | `architect.md` | @Architect |
 | `coder.md` | @Coder |
 | `auditor.md` | @Auditor |
-| `qa-sdet.md` | @QA-SDET |
 | `shared.md` | Cross-role — all agents |
 
 Entries appear in more than one role file when the same invariant has different
@@ -23,7 +22,7 @@ role-specific guidance.
 
 IDs use a slug format: `<scope>.<kebab-case-title>`
 
-- `scope` is the primary file the entry belongs to (`shared`, `coder`, `qa-sdet`, etc.)
+- `scope` is the primary file the entry belongs to (`shared`, `coder`, `architect`, etc.)
 - `kebab-case-title` is a short description of the invariant at risk
 
 Examples: `shared.security-boundary-fail-open`, `coder.convenience-api-erases-probe-semantics`

@@ -110,13 +110,13 @@ Exception/default paths in security logic must explicitly deny.
 
 ---
 
-## qa-sdet.import-masking-hides-failure: Import Masking in Test Suites
+## coder.import-masking-hides-failure: Import Masking in Test Suites
 
 ```yaml
-id: qa-sdet.import-masking-hides-failure
+id: coder.import-masking-hides-failure
 title: Import Masking in Test Suites
-roles: [QA-SDET, Auditor]
-steps: [test_audit]
+roles: [Coder, Auditor]
+steps: [code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests, imports]
 unit_domains: [agent-infra]
@@ -159,8 +159,8 @@ Review must not depend on filesystem discovery.
 ```yaml
 id: shared.ghost-coverage-placeholder-tests
 title: Ghost Coverage From Placeholder or Uncollected Tests
-roles: [QA-SDET, Architect, Auditor]
-steps: [test_audit]
+roles: [Coder, Architect, Auditor]
+steps: [code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests]
 triggers: [placeholder_test, uncollected_test, empty_assertion]
@@ -175,13 +175,13 @@ Coverage exists only when collected executable assertions run.
 
 ---
 
-## qa-sdet.test-invents-unlicensed-contract: Test Contract Invention
+## coder.test-invents-unlicensed-contract: Test Contract Invention
 
 ```yaml
-id: qa-sdet.test-invents-unlicensed-contract
+id: coder.test-invents-unlicensed-contract
 title: Test Contract Invention
-roles: [QA-SDET, Architect, Auditor]
-steps: [test_audit]
+roles: [Coder, Architect, Auditor]
+steps: [code_audit]
 risk_levels: [3, 4, 5]
 domains: [tests, source_law]
 triggers: [invented_error_literal, invented_route, unsourced_expected_output]
@@ -196,13 +196,13 @@ Invented test expectations validate local guesses instead of source law.
 
 ---
 
-## qa-sdet.partial-structured-error-assertion: Partial Assertion of Structured Error Contracts
+## coder.partial-structured-error-assertion: Partial Assertion of Structured Error Contracts
 
 ```yaml
-id: qa-sdet.partial-structured-error-assertion
+id: coder.partial-structured-error-assertion
 title: Partial Assertion of Structured Error Contracts
-roles: [QA-SDET, Architect, Auditor]
-steps: [test_audit, code_audit]
+roles: [Coder, Architect, Auditor]
+steps: [code_audit]
 risk_levels: [3, 4, 5]
 domains: [tests, errors]
 triggers: [partial_error_assertion, incomplete_payload_check, structured_exception_drift]
@@ -302,13 +302,13 @@ The blueprint must remain the same contract as source law.
 
 ---
 
-## qa-sdet.state-matrix-subcomponent-only-coverage: State-Matrix Coverage Collapse Through Subcomponent-Only Testing
+## coder.state-matrix-subcomponent-only-coverage: State-Matrix Coverage Collapse Through Subcomponent-Only Testing
 
 ```yaml
-id: qa-sdet.state-matrix-subcomponent-only-coverage
+id: coder.state-matrix-subcomponent-only-coverage
 title: State-Matrix Coverage Collapse Through Subcomponent-Only Testing
-roles: [QA-SDET, Architect, Auditor]
-steps: [test_audit]
+roles: [Coder, Architect, Auditor]
+steps: [code_audit]
 risk_levels: [4, 5]
 domains: [tests, state]
 triggers: [helper_only_coverage, missing_entrypoint_row, state_matrix_gap]
@@ -372,8 +372,8 @@ Every successful bootstrap path needs an explicit transition action.
 ```yaml
 id: shared.mocked-composition-misses-closed-surface
 title: Closed-Surface Coverage Gaps Behind Mocked Composition
-roles: [QA-SDET, Architect, Auditor]
-steps: [test_audit]
+roles: [Coder, Architect, Auditor]
+steps: [code_audit]
 risk_levels: [4, 5]
 domains: [tests, module_surface]
 triggers: [mocked_public_symbol, untested_public_api, closed_surface_gap]
@@ -393,8 +393,8 @@ Mocking a public symbol leaves that public contract unverified.
 ```yaml
 id: shared.defensive-fallback-branch-omitted
 title: Uncovered Defensive Fallback in Closed Branch Logic
-roles: [QA-SDET, Architect, Coder, Auditor]
-steps: [test_audit, code_audit]
+roles: [Coder, Architect, Auditor]
+steps: [code_audit]
 risk_levels: [4, 5]
 domains: [tests, branch_logic]
 triggers: [missing_defensive_fallback_test, untested_error_literal, total_function_gap]
@@ -414,8 +414,8 @@ Terminal fail-closed branches are contract-bearing even if rare.
 ```yaml
 id: shared.test-invents-noncanonical-dependency
 title: Test-Side Invention of Non-Canonical Dependency Surfaces
-roles: [QA-SDET, Architect, Coder, Auditor]
-steps: [test_audit, code_audit]
+roles: [Coder, Architect, Auditor]
+steps: [code_audit]
 risk_levels: [3, 4, 5]
 domains: [tests, imports, dependencies]
 triggers: [invented_fixture_constructor, undeclared_patch_target, noncanonical_dependency_surface]
@@ -435,8 +435,8 @@ Green tests can still be invalid if they require drifted implementation surfaces
 ```yaml
 id: shared.side-effect-invariant-unproven
 title: Unproven Operational Side-Effect Invariants
-roles: [QA-SDET, Architect, Coder, Auditor]
-steps: [test_audit, code_audit]
+roles: [Coder, Architect, Auditor]
+steps: [code_audit]
 risk_levels: [4, 5]
 domains: [tests, side_effects, observability]
 triggers: [missing_negative_call_assertion, missing_order_assertion, unproven_side_effect]
@@ -478,8 +478,8 @@ Repeated downstream oscillation can indicate insufficient source law.
 ```yaml
 id: shared.source-law-uses-nonexistent-upstream-api
 title: Source-Law Drift From Frozen Upstream APIs And Reachability Closure
-roles: [Architect, QA-SDET, Auditor]
-steps: [blueprint_audit, test_audit]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_audit, code_audit]
 risk_levels: [3, 4, 5]
 domains: [source_law, imports, tests]
 unit_domains: [agent-infra]
@@ -491,7 +491,7 @@ summary: Source law must use shipped upstream APIs and require only reachable ro
 Contradictory or nonexistent upstream contracts are upstream defects.
 
 ### Role Guidance
-- @Auditor: Do not route QA/Coder for faithfully following contradictory source law.
+- @Auditor: Do not route TESTS/CODER for faithfully following contradictory source law.
 
 ---
 
@@ -500,8 +500,8 @@ Contradictory or nonexistent upstream contracts are upstream defects.
 ```yaml
 id: shared.blueprint-missing-transitive-source-law
 title: Transitive Source-Law Dependency In Blueprint Handoffs
-roles: [Architect, Coder, QA-SDET, Auditor]
-steps: [blueprint_audit, test_audit, code_audit]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_audit, code_audit]
 risk_levels: [4, 5]
 domains: [blueprint, tests, implementation]
 unit_domains: [agent-infra]
@@ -522,8 +522,8 @@ Downstream roles should not read documents outside the blueprint to discover nor
 ```yaml
 id: shared.unprobed-framework-error-literal
 title: Unprobed Framework Error Literals In Source Law
-roles: [Architect, QA-SDET, Auditor]
-steps: [blueprint_audit, test_audit]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_audit, code_audit]
 risk_levels: [4, 5]
 domains: [source_law, framework, tests]
 unit_domains: [agent-infra]
@@ -544,8 +544,8 @@ Framework diagnostics are empirical runtime observables.
 ```yaml
 id: shared.unanchored-import-surface-preimpl-tests
 title: Unanchored Import Surface In Pre-Implementation Tests
-roles: [Architect, QA-SDET, Coder, Auditor]
-steps: [blueprint_audit, test_audit, code_audit]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_audit, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests, imports, blueprint]
 unit_domains: [agent-infra]
@@ -566,8 +566,8 @@ Tests cannot invent public module paths.
 ```yaml
 id: shared.non-falsifying-contract-assertion
 title: Non-Falsifying Contract Assertions
-roles: [QA-SDET, Architect, Coder, Auditor]
-steps: [test_audit, code_audit]
+roles: [Coder, Architect, Auditor]
+steps: [code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests, code, cli, workflow]
 triggers: [weak_assertion, non_falsifying_test, generic_failure]
@@ -587,8 +587,8 @@ Weak assertions are missing coverage, not partial coverage.
 ```yaml
 id: shared.unreachable-mocked-failure-path
 title: Unreachable Mocked Failure Paths
-roles: [QA-SDET, Architect, Coder, Auditor]
-steps: [test_audit, code_audit]
+roles: [Coder, Architect, Auditor]
+steps: [code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [tests, mocks, cli]
 triggers: [unreached_mock, earlier_parser_failure, uncalled_patch]

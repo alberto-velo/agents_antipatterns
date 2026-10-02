@@ -94,19 +94,19 @@ Malformed input at a security boundary must not fall through to allow.
 ```yaml
 id: shared.ghost-coverage-placeholder-tests
 title: Ghost Coverage From Placeholder or Uncollected Tests
-roles: [QA-SDET, Architect, Auditor]
-steps: [blueprint_draft, test_authoring, test_audit]
+roles: [Coder, Architect, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [blueprint, tests]
 triggers: [placeholder_test, uncollected_test, empty_assertion]
-summary: Blueprint assertions should be phrased so QA can map them to executable tests.
+summary: Blueprint assertions should be phrased so the Coder can map them to executable tests.
 ```
 
 ### Invariant
 Untestable prose encourages placeholder or comment-only coverage.
 
 ### Role Guidance
-- @Architect: State required observable outcomes clearly enough for QA to assert directly.
+- @Architect: State required observable outcomes clearly enough for the tests to assert directly.
 
 ---
 
@@ -136,8 +136,8 @@ Extra aliases, stronger annotations, or partial restatements can create a second
 ```yaml
 id: shared.mocked-composition-misses-closed-surface
 title: Closed-Surface Coverage Gaps Behind Mocked Composition
-roles: [QA-SDET, Architect, Auditor]
-steps: [blueprint_draft, test_authoring, test_audit]
+roles: [Coder, Architect, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
 risk_levels: [4, 5]
 domains: [blueprint, tests, module_surface]
 triggers: [mocked_public_symbol, untested_public_api, closed_surface_gap]
@@ -157,8 +157,8 @@ Mocked composition does not prove each published public symbol.
 ```yaml
 id: shared.test-invents-noncanonical-dependency
 title: Test-Side Invention of Non-Canonical Dependency Surfaces
-roles: [QA-SDET, Architect, Coder, Auditor]
-steps: [blueprint_draft, test_authoring, test_audit]
+roles: [Coder, Architect, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
 risk_levels: [3, 4, 5]
 domains: [blueprint, tests, imports]
 triggers: [invented_fixture_constructor, undeclared_patch_target, noncanonical_dependency_surface]
@@ -166,7 +166,7 @@ summary: Blueprints must name canonical dependency and observation surfaces when
 ```
 
 ### Invariant
-If QA must spy on a side effect or consume upstream types, the blueprint needs a canonical channel.
+If the tests must spy on a side effect or consume upstream types, the blueprint needs a canonical channel.
 
 ### Role Guidance
 - @Architect: Specify canonical observable channels and upstream constructors where they are test-relevant.
@@ -200,7 +200,7 @@ Mandatory operational side effects need a compliant mechanism and test channel.
 ```yaml
 id: shared.blueprint-missing-transitive-source-law
 title: Transitive Source-Law Dependency In Blueprint Handoffs
-roles: [Architect, Coder, QA-SDET, Auditor]
+roles: [Architect, Coder, Auditor]
 steps: [blueprint_draft, blueprint_audit]
 risk_levels: [4, 5]
 domains: [blueprint, source_law]
@@ -210,7 +210,7 @@ summary: Level 4-5 blueprints must contain every downstream normative requiremen
 ```
 
 ### Invariant
-Coder and QA must not need documents outside the blueprint to discover fixture matrices, literals, or behavior.
+The Coder must not need documents outside the blueprint to discover fixture matrices, literals, or behavior.
 
 ### Role Guidance
 - @Architect: Copy implementable and testable obligations into the blueprint itself.
@@ -222,8 +222,8 @@ Coder and QA must not need documents outside the blueprint to discover fixture m
 ```yaml
 id: shared.unanchored-import-surface-preimpl-tests
 title: Unanchored Import Surface In Pre-Implementation Tests
-roles: [Architect, QA-SDET, Coder, Auditor]
-steps: [blueprint_draft, blueprint_audit, test_authoring, test_audit]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [blueprint, tests, imports]
 unit_domains: [agent-infra]
@@ -232,7 +232,7 @@ summary: Blueprints requiring pre-implementation tests must provide an import pa
 ```
 
 ### Invariant
-QA cannot execute public-surface tests without a sanctioned binding.
+The tests cannot exercise the public surface without a sanctioned binding.
 
 ### Role Guidance
 - @Architect: Do not leave module path discretionary unless the test binding is also defined.
@@ -244,8 +244,8 @@ QA cannot execute public-surface tests without a sanctioned binding.
 ```yaml
 id: shared.non-falsifying-contract-assertion
 title: Non-Falsifying Contract Assertions
-roles: [QA-SDET, Architect, Coder, Auditor]
-steps: [blueprint_draft, test_authoring, test_audit]
+roles: [Coder, Architect, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [blueprint, tests, cli]
 triggers: [weak_assertion, non_falsifying_test, generic_failure]
@@ -265,8 +265,8 @@ Assertions that only prove a scenario ran create false confidence.
 ```yaml
 id: shared.unreachable-mocked-failure-path
 title: Unreachable Mocked Failure Paths
-roles: [QA-SDET, Architect, Coder, Auditor]
-steps: [blueprint_draft, test_authoring, test_audit]
+roles: [Coder, Architect, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
 risk_levels: [1, 2, 3, 4, 5]
 domains: [blueprint, tests, mocks]
 triggers: [unreached_mock, earlier_parser_failure, uncalled_patch]
@@ -353,8 +353,8 @@ transition out of deny-all startup mode.
 ```yaml
 id: shared.source-law-uses-nonexistent-upstream-api
 title: Source-Law Drift From Frozen Upstream APIs And Reachability Closure
-roles: [Architect, QA-SDET, Auditor]
-steps: [blueprint_draft, test_authoring, test_audit]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
 risk_levels: [3, 4, 5]
 domains: [source_law, imports, tests]
 unit_domains: [agent-infra]
@@ -376,8 +376,8 @@ upstream surface and the unit's own ordering rules.
 ```yaml
 id: shared.unprobed-framework-error-literal
 title: Unprobed Framework Error Literals In Source Law
-roles: [Architect, QA-SDET, Auditor]
-steps: [blueprint_draft, test_authoring, test_audit]
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
 risk_levels: [4, 5]
 domains: [source_law, framework, tests]
 unit_domains: [agent-infra]
