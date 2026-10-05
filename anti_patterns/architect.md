@@ -391,3 +391,87 @@ deductions from annotations.
 
 ### Role Guidance
 - @Architect: Probe exact framework observables or mark them non-normative.
+
+---
+
+## shared.incomplete-delete-set-test-orphan-directory: Incomplete Delete Set Leaves A Test-Only Directory
+
+```yaml
+id: shared.incomplete-delete-set-test-orphan-directory
+title: Incomplete Delete Set Leaves A Test-Only Directory
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_draft, blueprint_audit, implementation]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [blueprint, deletions]
+triggers: [orphaned_test_file, incomplete_delete_set, no_non_test_go_files]
+summary: A blueprint that removes a directory's production files must delete every file left in it, including test files that reference only package-local symbols.
+```
+
+### Invariant
+When a unit relocates a directory as create-at-new-path plus delete-at-old, `migration_scope` must delete every file left in the old directory — including test files whose only references are package-local symbols (a bare `New(...)`, a sibling's helper), which match no `removed_symbols` identifier and no moved path, so the mechanical blueprint checks cannot see them. An orphaned test-only directory fails the build and vet (“no non-test Go files”); the Coder then ships red gates or deletes files outside its declared scope, silently dropping carried-over assertions.
+
+### Role Guidance
+- @Architect: List the old directory and declare a delete (or a `deferred` entry) for every file in it; make the directory no longer existing part of the unit's observable signal.
+
+---
+
+## shared.grep-absence-signal-self-matches-compliant-code: Raw-Grep Absence Signal Matches Compliant Code
+
+```yaml
+id: shared.grep-absence-signal-self-matches-compliant-code
+title: Raw-Grep Absence Signal Matches Compliant Code
+roles: [Architect, Auditor]
+steps: [blueprint_draft, blueprint_audit, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [blueprint, assertions]
+triggers: [raw_grep_absence_signal, self_matching_signal, false_implementation_fail]
+summary: An absence signal for a retired identifier must be structural, never a raw substring grep that the tests and comments themselves match.
+```
+
+### Invariant
+A repository-wide raw-substring grep for a retired name necessarily matches the test that asserts its absence, a synthetic fixture written to prove a detector fires, and any stale comment — so no correct implementation satisfies it as written. An absence signal must be declaration-shaped or structural: an AST or line-shape check, a needle built by concatenation (`"type "+NAME+" interface"`), or a symbol query.
+
+### Role Guidance
+- @Architect: State every absence signal in a form that cannot match compliant code, in the blueprint's own wording.
+
+---
+
+## shared.format-mandate-breaks-byte-identity-assertion: Formatting Mandate Contradicts A Byte-Identity Assertion
+
+```yaml
+id: shared.format-mandate-breaks-byte-identity-assertion
+title: Formatting Mandate Contradicts A Byte-Identity Assertion
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [blueprint, formatting, refactor]
+triggers: [gofmt_mandate, byte_identity_assertion, preexisting_format_defect]
+summary: A formatter mandate never overrides an assertion that pins a moved file's content; pre-existing formatting defects stay untouched.
+```
+
+### Invariant
+A blueprint that both mandates a formatter on every changed file (`gofmt`) and pins a moved file's content byte for byte can contradict itself: the formatter rewrites a pre-existing, non-behavioural formatting defect (`(error)` → `error`, an import reorder) that the byte-identity assertion forbids. The byte-identity assertion wins.
+
+### Role Guidance
+- @Architect: Scope a formatting mandate to new and rewritten code, and name the moved files it does not apply to.
+
+---
+
+## shared.test-literal-trips-retirement-scan: Asserted Literal Trips A Repository-Wide Forbidden-Token Scan
+
+```yaml
+id: shared.test-literal-trips-retirement-scan
+title: Asserted Literal Trips A Repository-Wide Forbidden-Token Scan
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [tests, blueprint]
+triggers: [banned_token_literal, self_scanning_test, retirement_scan]
+summary: A test must not state, as one contiguous literal, a token a repository-wide forbidden-token scan bans — even when the blueprint mandates the value.
+```
+
+### Invariant
+A repository with a forbidden-token scan (a test that walks every source file for retired names and self-excludes only its own file) fails as a whole when a new test states an expected value with the banned token contiguous, even when the blueprint mandates that value: the unit's own test command passes while the repository's full test command fails. Building the expected value from fragments (`"…as-ccm-" + "us-…"`) keeps the compared string byte-identical and the scan green.
+
+### Role Guidance
+- @Architect: When the blueprint mandates a value containing a token an existing forbidden-token scan bans, name that scan and require the tests to spell the value without the contiguous token.

@@ -589,3 +589,193 @@ Framework diagnostic literals must be probed before the tests are asked to asser
 
 ### Role Guidance
 - @Coder (writing the tests): Test exact framework diagnostics verbatim; a runtime mismatch is a source-law defect — finish BLOCKED with it.
+
+---
+
+## coder.anchored-regex-whole-file-matcher: Anchored Line-Shape Regex Applied To A Whole File
+
+```yaml
+id: coder.anchored-regex-whole-file-matcher
+title: Anchored Line-Shape Regex Applied To A Whole File
+roles: [Coder, Auditor]
+steps: [implementation, code_audit]
+risk_levels: [0, 1, 2, 3, 4, 5]
+domains: [tests, regex]
+triggers: [anchored_regex_whole_string, unsatisfiable_assertion, single_line_fixture_only]
+summary: A ^...$ line-shape pattern matched against whole-file content must be line-aware, or no correct implementation can satisfy it.
+```
+
+### Invariant
+A line-shape pattern (`^<line>$`) applied through a whole-string matcher (Go `assert.Regexp(t, pattern, fileContents)`) anchors to the whole input, not to each line, so it never matches a multi-line file: the assertion is unsatisfiable by a correct implementation. The match must be line-aware — split the content into lines, or enable multiline (`(?m)`).
+
+### Role Guidance
+- @Coder: When writing the tests, make every line-shape match line-aware, and check each pattern against a representative multi-line file body, never only a one-line example.
+
+---
+
+## coder.test-file-static-analysis-gate: Test Files Must Pass The Repo's Static Analysis Before The Freeze
+
+```yaml
+id: coder.test-file-static-analysis-gate
+title: Test Files Must Pass The Repo's Static Analysis Before The Freeze
+roles: [Coder, Auditor]
+steps: [implementation, code_audit]
+risk_levels: [0, 1, 2, 3, 4, 5]
+domains: [tests, static_analysis]
+triggers: [test_file_lint_failure, test_file_vet_failure, frozen_test_needs_fix]
+summary: Test files are collected by the repo's vet/lint commands too; a finding in a frozen test costs a TESTS round.
+```
+
+### Invariant
+The repository's static-analysis commands (`go vet ./...`, `golangci-lint run ./...`, or the equivalent) collect test files as well. A test file that passes its own assertions but fails vet/lint blocks the unit, and once `freeze_tests` has run the Coder can no longer change it — only a `TESTS` route reopens it, at the cost of a full audit round. Typical shapes: unreachable code after a terminating `for {}`, an unused import or helper, an unformatted file, an unchecked return.
+
+### Role Guidance
+- @Coder: Run the repo's declared vet/lint commands over the test files before `freeze_tests` and fix every finding in them; with no lint config, assume the default linter set.
+
+---
+
+## coder.unasserted-carried-over-behaviour: Carried-Over Behaviour Left Unasserted In A Move Or Split
+
+```yaml
+id: coder.unasserted-carried-over-behaviour
+title: Carried-Over Behaviour Left Unasserted In A Move Or Split
+roles: [Coder, Auditor]
+steps: [implementation, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [tests, refactor]
+triggers: [preserve_clause_unasserted, carried_over_behaviour, move_only_unit]
+summary: In a move/split unit, every “preserve the original's behaviour” clause needs an assertion, not only the clauses that are new.
+```
+
+### Invariant
+When a unit recreates files under new paths and deletes the originals, a rewrite loses exactly the facts nobody checks. Every clause of a “preserve / carried over unchanged” mandatory assertion — startup and shutdown signalling, the exit path, error handling, unchanged literals — must be asserted, not only the clauses that distinguish the new files. A dropped runtime-behaviour clause ships green with changed behaviour in a unit whose contract is zero behaviour change.
+
+### Role Guidance
+- @Coder: When writing the tests, for each mandatory assertion that says preserve, carried over or same as before, assert every literal its observable signal names.
+
+---
+
+## coder.multi-clause-signal-partially-asserted: Compound Observable Signal Only Partly Asserted
+
+```yaml
+id: coder.multi-clause-signal-partially-asserted
+title: Compound Observable Signal Only Partly Asserted
+roles: [Coder, Auditor]
+steps: [implementation, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [tests, coverage]
+triggers: [compound_signal, partial_assertion]
+summary: Every fact a compound observable signal names must be traceable to an assertion; asserting one clause does not cover the rest.
+```
+
+### Invariant
+A mandatory assertion whose observable signal names several files, literals or fields is covered only when each named fact is in some test's read and assert set. A file no test opens is an unasserted fact, and a whole-repository scanner that does not read that file does not cover it.
+
+### Role Guidance
+- @Coder: When writing the tests, list every file and literal a compound signal names and assert each one.
+
+---
+
+## coder.layering-assertion-without-matching-scan: Layering Assertion Without A Scan That Can Match It
+
+```yaml
+id: coder.layering-assertion-without-matching-scan
+title: Layering Assertion Without A Scan That Can Match It
+roles: [Coder, Auditor]
+steps: [implementation, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [tests, layering]
+unit_domains: [agent-infra, api]
+triggers: [layering_invariant_uncovered, transitive_dependency_scan, scan_cannot_match]
+summary: A layering or dependency-direction assertion needs a test whose scan can actually match a violation.
+```
+
+### Invariant
+Direction-of-dependency and layering invariants (no adapter or transport import in the core) change no statement, so every behavioural and compile-time test stays green when they break, and linters do not catch them without a lint config. A test covers such an invariant only if its literal pattern, symbol or scan set can match the violation; a scanner aimed at something else does not, whatever its name.
+
+### Role Guidance
+- @Coder: Give each layering assertion its own scan of the unit's own production import blocks (excluding `_test.go` when the contract scopes the ban to production files), proven on a synthetic tree in both directions; never scan a dependency graph (`go list -deps`), which reports transitively acquired packages and fails a compliant implementation.
+
+---
+
+## shared.incomplete-delete-set-test-orphan-directory: Incomplete Delete Set Leaves A Test-Only Directory
+
+```yaml
+id: shared.incomplete-delete-set-test-orphan-directory
+title: Incomplete Delete Set Leaves A Test-Only Directory
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_draft, blueprint_audit, implementation]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [blueprint, deletions]
+triggers: [orphaned_test_file, incomplete_delete_set, no_non_test_go_files]
+summary: A blueprint that removes a directory's production files must delete every file left in it, including test files that reference only package-local symbols.
+```
+
+### Invariant
+When a unit relocates a directory as create-at-new-path plus delete-at-old, `migration_scope` must delete every file left in the old directory — including test files whose only references are package-local symbols (a bare `New(...)`, a sibling's helper), which match no `removed_symbols` identifier and no moved path, so the mechanical blueprint checks cannot see them. An orphaned test-only directory fails the build and vet (“no non-test Go files”); the Coder then ships red gates or deletes files outside its declared scope, silently dropping carried-over assertions.
+
+### Role Guidance
+- @Coder: A leftover file you may not delete is a `finish(BLOCKED)` gap (`file_not_in_blueprint`), never a deletion outside your entries.
+
+---
+
+## shared.format-mandate-breaks-byte-identity-assertion: Formatting Mandate Contradicts A Byte-Identity Assertion
+
+```yaml
+id: shared.format-mandate-breaks-byte-identity-assertion
+title: Formatting Mandate Contradicts A Byte-Identity Assertion
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [blueprint, formatting, refactor]
+triggers: [gofmt_mandate, byte_identity_assertion, preexisting_format_defect]
+summary: A formatter mandate never overrides an assertion that pins a moved file's content; pre-existing formatting defects stay untouched.
+```
+
+### Invariant
+A blueprint that both mandates a formatter on every changed file (`gofmt`) and pins a moved file's content byte for byte can contradict itself: the formatter rewrites a pre-existing, non-behavioural formatting defect (`(error)` → `error`, an import reorder) that the byte-identity assertion forbids. The byte-identity assertion wins.
+
+### Role Guidance
+- @Coder: Leave a pre-existing formatting defect in a byte-pinned file untouched; if that assertion goes red on a formatting-only diff, revert the formatting — never the test.
+
+---
+
+## shared.test-literal-trips-retirement-scan: Asserted Literal Trips A Repository-Wide Forbidden-Token Scan
+
+```yaml
+id: shared.test-literal-trips-retirement-scan
+title: Asserted Literal Trips A Repository-Wide Forbidden-Token Scan
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [tests, blueprint]
+triggers: [banned_token_literal, self_scanning_test, retirement_scan]
+summary: A test must not state, as one contiguous literal, a token a repository-wide forbidden-token scan bans — even when the blueprint mandates the value.
+```
+
+### Invariant
+A repository with a forbidden-token scan (a test that walks every source file for retired names and self-excludes only its own file) fails as a whole when a new test states an expected value with the banned token contiguous, even when the blueprint mandates that value: the unit's own test command passes while the repository's full test command fails. Building the expected value from fragments (`"…as-ccm-" + "us-…"`) keeps the compared string byte-identical and the scan green.
+
+### Role Guidance
+- @Coder: Before `freeze_tests`, run the repository's full declared test command, not only the unit's package, and spell any asserted literal that trips a forbidden-token scan from fragments.
+
+---
+
+## coder.derivative-surface-asserts-deltas-only: Derivative Surface Entry Asserted Only For Its Differences
+
+```yaml
+id: coder.derivative-surface-asserts-deltas-only
+title: Derivative Surface Entry Asserted Only For Its Differences
+roles: [Coder, Auditor]
+steps: [implementation, code_audit]
+risk_levels: [2, 3, 4, 5]
+domains: [tests, coverage]
+triggers: [derivative_surface_entry, delta_only_assertions, mirrored_artifact]
+summary: When a surface entry is defined as identical to another except named differences, the tests must assert the carried-over facts for it too.
+```
+
+### Invariant
+When a Public Surface entry defines an artifact by reference to another (“identical to X except …”), every carried-over fact of X binds the mirror as well. A suite that asserts only the named differences leaves the mirror's remaining facts unverified while the per-entry assertion mapping looks complete — mirrored Deployments or Dockerfiles in infra, duplicated handlers in api, mirrored components in frontend.
+
+### Role Guidance
+- @Coder: When writing the tests, assert each carried-over fact of the base entry against the mirror as its own assertion, not only the named differences.
