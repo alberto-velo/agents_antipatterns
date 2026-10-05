@@ -28,7 +28,8 @@ IDs use a slug format: `<scope>.<kebab-case-title>`
 Examples: `shared.security-boundary-fail-open`, `coder.convenience-api-erases-probe-semantics`
 
 IDs are unique by construction — no counter, no registry file needed.
-Uniqueness is validated automatically when a PR is opened.
+Nexus validates the registry before it pushes a proposals PR; a hand-made change is validated
+locally (see [Validation](#validation)).
 
 ## Adding a new entry
 
@@ -57,14 +58,17 @@ The reusable invariant at risk.
 - @Role2: What to check.
 ````
 
-2. Open a PR — the CI duplicate-slug check runs automatically.
+2. Validate the registry (below), then open a PR. Proposals from a Nexus run don't need this
+   step: `nexus complete` adds them to the role files and opens the PR itself.
 3. Get a teammate approval and merge.
 4. Run `nexus update-governance` on all machines to pull the new rule.
 
 ## Validation
 
-Check for duplicate slugs across all files:
+Check every entry's metadata and the slug IDs across all files, from this repo's root:
 
 ```bash
-nexus anti-patterns validate
+nexus anti-patterns validate --registry-root anti_patterns
 ```
+
+Without `--registry-root` it validates the registry Nexus last pulled, not your edits.
