@@ -2,6 +2,14 @@
 
 Record significant changes to anti-pattern rules.
 
+## 2026-10-05 — proposals arrive as PRs from `nexus complete` (nexus §87)
+
+- No rule change. Proposals are now registry entries checked against this repo's format when
+  the Auditor makes them, and `nexus complete` opens the PR (branch
+  `nexus/proposals/<feature>`, one copy per listed role) instead of printing a manual recipe.
+- READMEs updated: the new flow, the current role files (no `qa-sdet.md`), the full list of
+  required fields, and local validation — this repo has no CI check.
+
 ## 2026-10-02 — the Coder writes the tests (nexus §80)
 
 - `qa-sdet.md` removed: the QA-SDET role and its `test_authoring`/`test_audit` steps are retired.
