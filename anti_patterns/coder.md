@@ -627,10 +627,10 @@ summary: Test files are collected by the repo's vet/lint commands too; a finding
 ```
 
 ### Invariant
-The repository's static-analysis commands (`go vet ./...`, `golangci-lint run ./...`, or the equivalent) collect test files as well. A test file that passes its own assertions but fails vet/lint blocks the unit, and once `freeze_tests` has run the Coder can no longer change it — only a `TESTS` route reopens it, at the cost of a full audit round. Typical shapes: unreachable code after a terminating `for {}`, an unused import or helper, an unformatted file, an unchecked return.
+The repository's static-analysis commands (`go vet ./...`, `golangci-lint run ./...`, or the equivalent) collect test files as well. A test file that passes its own assertions but fails vet/lint blocks the unit, and once `freeze_tests` has run the Coder can no longer change it — only a `TESTS` route reopens it, at the cost of a full audit round. Typical shapes: unreachable code after a terminating `for {}`, an unused import or helper, an unformatted file, an unchecked return, a type or argument mismatch against code that already exists. Before the freeze the code entries are not written yet, so a test that uses them cannot compile cleanly: an error that only names a symbol a `kind: code` entry declares and has not written yet is expected; every other finding is a defect in the test. Most compilers stop at the first error (`go vet` at a package's first type error), which hides the rest.
 
 ### Role Guidance
-- @Coder: Run the repo's declared vet/lint commands over the test files before `freeze_tests` and fix every finding in them; with no lint config, assume the default linter set.
+- @Coder: Before `freeze_tests`, compile and lint the test files with commands that report every error, not just the first (Go: build each package's test binary without running it, with `-gcflags=all=-e`). Fix every finding except an error that only names a symbol a `kind: code` entry declares and has not written yet; with no lint config, assume the default linter set.
 
 ---
 
