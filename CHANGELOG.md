@@ -2,6 +2,10 @@
 
 Record significant changes to anti-pattern rules.
 
+## 2026-10-10 — `coder.test-file-static-analysis-gate` fits tests written before their code (nexus §92)
+
+- The Coder guidance asked to fix every static-analysis finding in the test files before the freeze. Before the freeze the code entries are not written yet, so a test that uses them cannot compile cleanly, and in AS-109 the Coder read every error as expected and froze four compile errors. The guidance now separates the expected errors (a symbol a `kind: code` entry declares and has not written yet) from the defects, and asks for a command that reports every error. It matches the Coder prompt of nexus §92. The invariant says the same in both role files; the Auditor guidance is unchanged.
+
 ## 2026-10-05 — proposals arrive as PRs from `nexus complete` (nexus §87)
 
 - No rule change. Proposals are now registry entries checked against this repo's format when
