@@ -811,3 +811,323 @@ When a Public Surface entry defines an artifact by reference to another (“iden
 
 ### Role Guidance
 - @Auditor: For each derivative surface entry, compare the base entry's facts with the mirror's assertions and prove a gap by deleting a carried-over fact with `run_sandbox_bash`; a delta-only set is missing coverage, routed `TESTS`.
+
+---
+
+## architect.unreachable-mandatory-outcome-under-closed-surface: Mandatory Outcome With No Reachable Path Under the Blueprint's Own Mapping
+
+```yaml
+id: architect.unreachable-mandatory-outcome-under-closed-surface
+title: Mandatory Outcome With No Reachable Path Under the Blueprint's Own Mapping
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_draft, blueprint_audit, implementation]
+risk_levels: [3, 4, 5]
+domains: [blueprint, tests, api]
+unit_domains: [api]
+triggers: [closed_failure_alphabet, fail_closed_error_mapping, frozen_mandatory_assertion, fake_failure_switch, existence_check_before_permission]
+summary: Every mandatory outcome must be producible by the blueprint's own step-level error mapping, with a test hook that reaches it.
+```
+
+### Invariant
+For a unit with a closed outcome alphabet, each mandated outcome has at least one execution path in the deterministic pseudocode that produces it, and at least one authorized observation/failure-control hook that makes that path reachable from a test. Where an earlier step swallows an error and maps it to a different canonical outcome, an assertion that demands the original cause for the same event is self-contradictory, and the test hook the assertions rely on must itself be in the closed surface.
+
+### Role Guidance
+- @Auditor: For each mandatory outcome, name the pseudocode step that produces it before accepting it. A frozen assertion with no producing step, or one whose only reachable path runs through a failure control absent from the closed surface, is a blocking blueprint_fidelity_defect routed ARCHITECT — not a Coder or test problem.
+
+---
+
+## coder.reflect-method-set-order-is-alphabetical: Reflect Interface Method Set Cannot Report Declaration Order
+
+```yaml
+id: coder.reflect-method-set-order-is-alphabetical
+title: Reflect Interface Method Set Cannot Report Declaration Order
+roles: [Coder, Architect, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
+risk_levels: [2, 3, 4, 5]
+domains: [tests, api]
+triggers: [reflect_method_set_assertion, interface_declaration_order, closed_interface_surface]
+summary: Never assert an interface's mandated declaration order through reflect.Type.Method(i) — reflect returns methods sorted by name, so the assertion is unsatisfiable.
+```
+
+### Invariant
+Go's reflect orders an interface's method set by name: `reflect.TypeOf((*I)(nil)).Elem().Method(i)` yields methods alphabetically, regardless of declaration order. A test that maps a mandated declaration-order list onto reflect's index therefore fails for every compliant interface. Assert the method-name SET via reflect (sort before comparing); where declaration order itself is the contract, observe it from the interface's source text.
+
+### Role Guidance
+- @Auditor: At code_audit, run any reflect-based order assertion; if it compares a mandated order against Method(i) by index, it is an unsatisfiable frozen test — blocking defect routed TESTS.
+
+---
+
+## architect.closed-edit-set-vs-repo-absence-scan: Closed Edit Set Collides With a Pre-existing Whole-Repository Absence Scan
+
+```yaml
+id: architect.closed-edit-set-vs-repo-absence-scan
+title: Closed Edit Set Collides With a Pre-existing Whole-Repository Absence Scan
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
+risk_levels: [2, 3, 4, 5]
+domains: [blueprint, tests, api]
+triggers: [whole_repository_absence_scan, closed_file_set, cross_unit_test_collision, definition_of_done_red]
+summary: Before closing a unit's edit set, search the repository for whole-repo absence scans the mandated artifact necessarily trips; authorize the scope change or record the collision.
+```
+
+### Invariant
+A blueprint that closes its file set ("no file outside migration_scope may be touched") must show that no pre-existing whole-repository absence/forbidden-pattern scan is tripped by the artifact it mandates. If one is, the scan file enters migration_scope with an explicit bound, or the collision is recorded as a numbered discrepancy with the developer's remedy. Otherwise the unit's Definition of Done (repo test command green, only manifest files changed) is unsatisfiable.
+
+### Role Guidance
+- @Auditor: At code_audit, diff the full test run against verification_baseline; a new failure in a sibling unit's whole-repo absence scan is a blocking blueprint_fidelity_defect routed ARCHITECT, because the Coder may not touch a file outside migration_scope and renaming the mandated symbol to dodge the scan is forbidden.
+
+---
+
+## coder.derived-order-assertion-over-random-keys: List-Order Assertion Over Random Keys Assumes Seeding Order
+
+```yaml
+id: coder.derived-order-assertion-over-random-keys
+title: List-Order Assertion Over Random Keys Assumes Seeding Order
+roles: [Auditor, Coder]
+steps: [implementation, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [tests, api]
+triggers: [list_order_assertion, random_uuid_fixtures, sorted_collaborator_output, flaky_test]
+summary: A test asserting list order over uuid.New() keys must derive the expected order from the sort rule; comparing against seeding order flakes about half the time.
+```
+
+### Invariant
+When a test's fixtures are keyed by randomly generated identifiers (uuid.New()) and the collaborator returns them in a derived order (sorted by identifier), the expected order must be derived by the test from the same rule — sorting the seeded keys, or comparing the set plus the collaborator's own returned order. Asserting seeded/insertion order against a sorted result fails about half the runs against a fully compliant implementation.
+
+### Role Guidance
+- @Auditor: At code_audit, flag any assertion on an element index whose key is random and whose order comes from a sort the test merely describes; prove it with -count=20 (or a probability probe over the key type) and route the flaky assertion TESTS.
+
+---
+
+## architect.assertion-count-needs-declared-observation-channel: A Call-Count Assertion Needs A Double That Records The Count
+
+```yaml
+id: architect.assertion-count-needs-declared-observation-channel
+title: A Call-Count Assertion Needs A Double That Records The Count
+roles: [Architect, Auditor]
+steps: [blueprint_draft, blueprint_audit]
+risk_levels: [3, 4, 5]
+domains: [blueprint, tests, security]
+triggers: [mandatory_assertion_names_call_count, closed_test_double_surface, observation_channel_table]
+summary: Every quantitative clause in a Mandatory Assertion needs a declared observation channel; a double recording only the last call cannot falsify "exactly N calls".
+```
+
+### Invariant
+A Mandatory Assertion is checkable only if the test-double surface the blueprint declares records the fact it names. When the declared double stores only the most recent call (plus a "was any made" flag), an "exactly one / exactly N calls" clause has no falsifier, and a closed fake surface additionally forbids the accessor that would supply one — so the Coder must either drop the clause, invent a forbidden fake member, or finish BLOCKED.
+
+### Role Guidance
+- @Auditor: At blueprint_audit, cross-check each quantity clause in # Mandatory Assertions and in the State Transition Table's Observable column against the Authorized Observation Channels table and the closed fake surface: zero-call clauses are falsifiable by a recorded/absent flag, N-call clauses are not falsifiable by a last-call-only double. Route the mismatch ARCHITECT as blueprint_fidelity_defect; do not FAIL the Coder for whichever workaround it picks.
+
+---
+
+## architect.prescribed-test-construction-must-match-the-code-it-names: Prescribed Test Construction Must Type-Check Against The Code It Names
+
+```yaml
+id: architect.prescribed-test-construction-must-match-the-code-it-names
+title: Prescribed Test Construction Must Type-Check Against The Code It Names
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_draft, blueprint_audit]
+risk_levels: [3, 4, 5]
+domains: [blueprint, tests]
+triggers: [prescribed_constructor_returns_port_interface, test_scaffolding_would_not_compile, prescribed_helper_signature_mismatch]
+summary: Blueprint-prescribed test scaffolding must match each named constructor's real signature; a constructor returning the port interface cannot be assigned to a concrete fake pointer.
+```
+
+### Invariant
+Every constructor, receiver, parameter list and result list a blueprint prescribes for a test file must be the one the named code actually has. A frozen test built on a construction that does not type-check cannot be satisfied by any change the blueprint permits, so it fails at implementation and reopens the blueprint; likewise a helper whose prescribed usage contradicts the language (comparing `reflect`'s alphabetically sorted interface methods by declaration index) is unsatisfiable by a compliant implementation.
+
+### Role Guidance
+- @Auditor: At blueprint_audit, resolve each prescribed constructor/call/helper usage against the code it names (receiver type, parameter list, result list) with the read tools; a prescribed call that cannot compile or an assertion no compliant implementation can satisfy is a blocking blueprint defect routed ARCHITECT, not a Coder problem.
+
+---
+
+## architect.restated-rule-predicates-must-match-across-sections: Cross-Section Rule Restatements Must Use the Pseudocode's Predicate
+
+```yaml
+id: architect.restated-rule-predicates-must-match-across-sections
+title: Cross-Section Rule Restatements Must Use the Pseudocode's Predicate
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
+risk_levels: [4, 5]
+domains: [blueprint, implementation]
+unit_domains: [api]
+triggers: [closed_state_transition_table, closed_failure_alphabet, mandatory_assertion_restates_pseudocode, ordering_invariant_permission_check, outcome_mapping_multiple_sections]
+summary: A rule restated across blueprint sections by a positional proxy rather than the pseudocode's predicate double-maps one reachable input and authorizes reordered implementations.
+```
+
+### Invariant
+Where a blueprint states one outcome or ordering rule in several closed sections (Mandatory Assertion, State Transition Table, outcome alphabet), every restatement must use the same semantic predicate and apply at the same step the pseudocode places it; no reachable input may fall in two rows with different canonical outcomes, and no table row may assert an observable (e.g. "zero permission calls") that the pseudocode's own step order contradicts.
+
+### Role Guidance
+- @Auditor: At blueprint_audit, take each transition the pseudocode sequences (parse -> existence -> permission -> data read) and read every closed section's row for it: a row whose observable contradicts the pseudocode's own step position is a blocking blueprint_fidelity_defect routed ARCHITECT, even when the implementation instruction itself is unambiguous.
+
+---
+
+## architect.narrowed-inherited-absence-scan-must-assert-its-scan-set: A Narrowed Inherited Absence Scan Must Assert Its Own Scan Set
+
+```yaml
+id: architect.narrowed-inherited-absence-scan-must-assert-its-scan-set
+title: A Narrowed Inherited Absence Scan Must Assert Its Own Scan Set
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_draft, blueprint_audit, code_audit]
+risk_levels: [4, 5]
+domains: [blueprint, implementation, tests]
+unit_domains: [api, agent-infra]
+triggers: [amend_frozen_repository_wide_test, scope_absence_scan_to_packages, conflict_with_sibling_invariant]
+summary: When a unit narrows another unit's whole-repository absence test to a declared scan set, the blueprint must assert the scan set itself, or the narrowed scan passes vacuously while the sibling invariant silently dies.
+```
+
+### Invariant
+A blueprint that resolves a conflict with a frozen repository-wide absence invariant by scoping that scan to a declared set of paths must make the scan set itself an observable: an assertion that the amended scan walks exactly those declared paths, each of which exists. Then a narrowing to an empty, renamed or over-narrow set fails, and the invariant keeps provable force over the paths it was narrowed to. The amended test's synthetic-tree subtest proves only the scanner logic, never the scan set.
+
+### Role Guidance
+- @Auditor: At blueprint_audit, ask of every authorized narrowing of an inherited absence scan: which frozen assertion fails if the Coder scopes the scan to a path that does not exist, or to fewer paths than declared? If the answer is 'none', the invariant ships silently dead behind a green test — require the scan-set assertion. At code_audit, read the amended scan set against the declared list.
+
+---
+
+## coder.aliasing-non-mutation-assertion-hides-mutation: Non-mutation assertion compared against the double's stored object cannot fail
+
+```yaml
+id: coder.aliasing-non-mutation-assertion-hides-mutation
+title: Non-mutation assertion compared against the double's stored object cannot fail
+roles: [Coder, Auditor]
+steps: [implementation, code_audit]
+risk_levels: [2, 3, 4, 5]
+domains: [tests]
+triggers: [non_mutation_assertion, side_effect_absence_assertion, fake_stores_seeded_pointer]
+summary: A "writes nothing" check that re-reads a double and compares against the value it seeded cannot fail when the double stores the seeded pointer: snapshot values before the call.
+```
+
+### Invariant
+A non-mutation / no-side-effect assertion is falsifiable only when its expectation is a value snapshot (or literal) taken BEFORE the call and it runs on every path the assertion names, covering the collaborator's whole observable state including the record count. If the test double keeps the caller's pointer (a map keyed by ID storing the seeded struct pointer), the seeded value IS the stored object, so any after-only re-read compared against it passes against an implementation that writes, updates or deletes.
+
+### Role Guidance
+- @Auditor: At code_audit, read every non-mutation assertion's expectation: if it aliases the object the double stores (the same pointer the test seeded) or is taken only after the call, the assertion is unfalsifiable — prove it by injecting Update*/Delete* on that path with run_sandbox_bash; a green suite is a blocking test_coverage_defect routed TESTS, not an implementation finding.
+
+---
+
+## architect.prescribed-test-calls-unverified-against-named-code: Blueprint-prescribed test calls not verified against the code they name
+
+```yaml
+id: architect.prescribed-test-calls-unverified-against-named-code
+title: Blueprint-prescribed test calls not verified against the code they name
+roles: [Architect, Auditor]
+steps: [blueprint_draft, blueprint_audit, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [tests, blueprint]
+unit_domains: [api, agent-infra]
+triggers: [blueprint_prescribes_test_construction, constructor_returns_port_interface, frozen_test_cannot_compile]
+summary: Blueprint test sections must prescribe calls in the form the named code actually declares; an uncompilable prescription freezes the Coder before any code exists.
+```
+
+### Invariant
+Every call, constructor, receiver and accessor a blueprint's test section prescribes must resolve as written against the code it names — a create entry's declared contract or a directly-required module at its pinned version. A prescription whose receiver type, parameter list or result list does not match that code is a blueprint defect: the freeze happens before any implementation exists, so the Coder can neither compile it nor lawfully change it.
+
+### Role Guidance
+- @Auditor: At blueprint_audit, resolve every call the test section prescribes against the named file or pinned module and FAIL scaffolding that cannot compile, routed ARCHITECT. At code_audit, confirm the frozen suite builds (vet clean, test binaries build) before judging any assertion, and treat a blueprint-prescribed call that does not resolve as a blueprint defect, not Coder invention.
+
+---
+
+## architect.closed-parent-set-not-declared-on-create: Create Entry Breaks A Frozen Closed-Set Assertion Over Its Parent
+
+```yaml
+id: architect.closed-parent-set-not-declared-on-create
+title: Create Entry Breaks A Frozen Closed-Set Assertion Over Its Parent
+roles: [Architect, Auditor]
+steps: [blueprint_audit, implementation, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [blueprint, tests]
+triggers: [create_entry_adds_sibling_under_existing_parent, frozen_test_pins_closed_directory_or_glob_set, repo_test_gate_reddens_from_new_sibling]
+summary: A create entry must account for every frozen test that pins a closed set (directory listing, glob, count) over the new file's parent path, as an owned entry or an explicit deferral.
+```
+
+### Invariant
+When a unit creates a file in a path whose parent directory already exists, the blueprint must declare any live assertion that pins the parent's item set as a closed list; such a create is not a "no other file changes" unit. The collision is invisible to the mechanical blueprint checks because the new path appears nowhere in the colliding assertion — the assertion counts the parent's children — so only an explicit search for set/count assertions over the parent path finds it.
+
+### Role Guidance
+- @Auditor: At blueprint_audit, check each create path's parent directory for frozen closed-set assertions; a create whose parent set is pinned elsewhere with no entry and no holding deferral is a blocking blueprint_fidelity_defect routed ARCHITECT, not an advisory, and not a reason to widen a repository-wide gate assertion.
+
+---
+
+## shared.created-sibling-breaks-frozen-closed-set-scan: Created Sibling Breaks A Frozen Closed-Set Assertion
+
+```yaml
+id: shared.created-sibling-breaks-frozen-closed-set-scan
+title: Created Sibling Breaks A Frozen Closed-Set Assertion
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_audit, implementation, code_audit]
+risk_levels: [2, 3, 4, 5]
+domains: [tests, blueprint]
+triggers: [creates_new_sibling_directory_or_file, frozen_test_enumerates_closed_set, migration_scope_missing_test_update, blueprint_forbids_editing_tests]
+summary: A unit that creates a new sibling under a path a frozen test enumerates as a closed set must own that test's expectation update, or defer it explicitly with the red-gate interval disclosed.
+```
+
+### Invariant
+Every structural test whose expected set grows because of this unit's new file or directory is a manifest entry (modify) or an explicit deferred hand-off; a unit may not both add the member and forbid the edit that admits it.
+
+### Role Guidance
+- @Auditor: At blueprint_audit, run this check explicitly: for every create entry, ask which existing closed-set assertion its parent path feeds. Mechanical blueprint checks cannot see it — the new path never appears in the colliding assertion, only its count does, and a package-scoped gate assertion will report green while the repository test command is red. A missing entry and missing deferral is a blocking blueprint_fidelity_defect routed ARCHITECT; the fix is to own the colliding test, not to widen the gate assertion.
+
+---
+
+## shared.source-scan-needle-must-pin-its-clause: Source-Scan Needle Must Pin Its Own Clause
+
+```yaml
+id: shared.source-scan-needle-must-pin-its-clause
+title: Source-Scan Needle Must Pin Its Own Clause
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
+risk_levels: [2, 3, 4, 5]
+domains: [tests, blueprint, implementation]
+triggers: [source_scan_contract_assertion, multi_clause_behaviour_assertion, presence_needle_for_multi_site_literal, blueprint_test_scope_prescribes_needles]
+summary: A test that reads a file's source covers a behaviour clause only with a needle that pins that clause's site, never a token every implementation or another clause's path contains.
+```
+
+### Invariant
+When a Mandatory Assertion names several behaviour clauses (panics on X, cancels on Y, exits on Z) and is discharged by a test that reads the file's own source (a `main()` entrypoint has no runtime seam), each clause needs a needle only that clause satisfies: the exact statement (`signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)`), an occurrence count the Blueprint's pseudocode fixes (`strings.Count(src, "cancelFunc()") == 2`), or the adjacency of the guarded call and its handler (`if err != nil {` then `panic(err)`). A bare token such as `panic(` or `cancelFunc()` is present in any plausible implementation, and a literal that also occurs on another clause's path is satisfied by that occurrence, so an implementation that drops the clause still passes.
+
+### Role Guidance
+- @Auditor: At `code_audit`, mutate each clause away on its own with `run_sandbox_bash`, leaving the others intact; a green suite is missing coverage, routed `TESTS` when the Blueprint gives the site-pinning literal and `ARCHITECT` when its Test Scope prescribed the weak needle set.
+
+---
+
+## architect.surface-references-absent-sibling-artifact: Surface Registers Or Asserts Against A Sibling Artifact Absent From The Tree
+
+```yaml
+id: architect.surface-references-absent-sibling-artifact
+title: Surface Registers Or Asserts Against A Sibling Artifact Absent From The Tree
+roles: [Architect, Auditor]
+steps: [blueprint_draft, blueprint_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [blueprint, infra]
+unit_domains: [infra]
+triggers: [registration_list_modify, kustomization_resources_registration, surface_references_sibling_artifact, sibling_artifact_missing_from_tree, index_integrity_test]
+summary: A path the Public Surface registers or asserts against must exist in the tree the unit starts from or be a declared entry; blueprint_checks validates only declared paths.
+```
+
+### Invariant
+Every path a `# Public Surface` entry registers in a list file, or asserts a content fact about, exists in the tree the unit starts from, or that artifact is itself a declared entry of the same unit. `blueprint_checks` validates only declared entry paths, so a registration pointing at a sibling that was never landed passes the mechanical check and makes the repository's own index-integrity test unsatisfiable for this unit.
+
+### Role Guidance
+- @Auditor: At `blueprint_audit`, run the Achievability gate over paths the surface *references* (registered siblings, byte-copy sources, files named in assertions), not only the declared entries: `blueprint_checks` confirms declared paths only. A surface that mandates registering, or asserts content of, a path missing from `list_dir`/`search_repo` is a blocking `blueprint_fidelity_defect` routed ARCHITECT, because the unit's own 'every entry resolves to an existing file' test then has no green outcome.
+
+---
+
+## architect.mandatory-assertion-unmapped-in-test-scope: Mandatory Assertion With No Test Named For It In Test Scope
+
+```yaml
+id: architect.mandatory-assertion-unmapped-in-test-scope
+title: Mandatory Assertion With No Test Named For It In Test Scope
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [blueprint, tests, infra]
+triggers: [mandatory_assertion_without_named_test, test_scope_lists_extensions_only, absence_assertion_uncovered]
+summary: Every mandatory assertion must be mapped to a named test in Test Scope, or the Coder ships it unverified: the Coder writes to the test list, not the assertion list.
+```
+
+### Invariant
+# Test Scope must account for every id in # Mandatory Assertions: each one either names the test (new or extended) that verifies it, or is explicitly declared a code_audit-only bound check. Absence-shaped and carried-over assertions are the ones usually dropped, because no Test Scope bullet names a file for them, and they ship unfalsifiable: a suite written to the Test Scope list passes green while the assertion's own text is contradicted.
+
+### Role Guidance
+- @Auditor: At code_audit, prove falsifiability by mutating each mandatory assertion's own artifact with run_sandbox_bash (swap the pinned value, add the forbidden key) and confirming a test fails. An assertion no mutation of the unit's own files can fail is missing coverage routed TESTS even when the implementation is fully correct; a clause naming lines the unit never edited is advisory, checked against the unit's own commits instead.
