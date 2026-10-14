@@ -779,3 +779,237 @@ When a Public Surface entry defines an artifact by reference to another (“iden
 
 ### Role Guidance
 - @Coder: When writing the tests, assert each carried-over fact of the base entry against the mirror as its own assertion, not only the named differences.
+
+---
+
+## architect.unreachable-mandatory-outcome-under-closed-surface: Mandatory Outcome With No Reachable Path Under the Blueprint's Own Mapping
+
+```yaml
+id: architect.unreachable-mandatory-outcome-under-closed-surface
+title: Mandatory Outcome With No Reachable Path Under the Blueprint's Own Mapping
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_draft, blueprint_audit, implementation]
+risk_levels: [3, 4, 5]
+domains: [blueprint, tests, api]
+unit_domains: [api]
+triggers: [closed_failure_alphabet, fail_closed_error_mapping, frozen_mandatory_assertion, fake_failure_switch, existence_check_before_permission]
+summary: Every mandatory outcome must be producible by the blueprint's own step-level error mapping, with a test hook that reaches it.
+```
+
+### Invariant
+For a unit with a closed outcome alphabet, each mandated outcome has at least one execution path in the deterministic pseudocode that produces it, and at least one authorized observation/failure-control hook that makes that path reachable from a test. Where an earlier step swallows an error and maps it to a different canonical outcome, an assertion that demands the original cause for the same event is self-contradictory, and the test hook the assertions rely on must itself be in the closed surface.
+
+### Role Guidance
+- @Coder: If a frozen assertion demands an outcome the pseudocode cannot produce, do not silently pick one of the two contradicting clauses or invent an unauthorised fake hook: finish BLOCKED naming both clauses, so the blueprint is reconciled upstream.
+
+---
+
+## coder.reflect-method-set-order-is-alphabetical: Reflect Interface Method Set Cannot Report Declaration Order
+
+```yaml
+id: coder.reflect-method-set-order-is-alphabetical
+title: Reflect Interface Method Set Cannot Report Declaration Order
+roles: [Coder, Architect, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
+risk_levels: [2, 3, 4, 5]
+domains: [tests, api]
+triggers: [reflect_method_set_assertion, interface_declaration_order, closed_interface_surface]
+summary: Never assert an interface's mandated declaration order through reflect.Type.Method(i) — reflect returns methods sorted by name, so the assertion is unsatisfiable.
+```
+
+### Invariant
+Go's reflect orders an interface's method set by name: `reflect.TypeOf((*I)(nil)).Elem().Method(i)` yields methods alphabetically, regardless of declaration order. A test that maps a mandated declaration-order list onto reflect's index therefore fails for every compliant interface. Assert the method-name SET via reflect (sort before comparing); where declaration order itself is the contract, observe it from the interface's source text.
+
+### Role Guidance
+- @Coder: For a Go interface method-set test, compare reflect names as a sorted set, and prove declaration order by scanning the interface's source text with the package's existing helpers; never bind an assertion to reflect's index order.
+
+---
+
+## architect.closed-edit-set-vs-repo-absence-scan: Closed Edit Set Collides With a Pre-existing Whole-Repository Absence Scan
+
+```yaml
+id: architect.closed-edit-set-vs-repo-absence-scan
+title: Closed Edit Set Collides With a Pre-existing Whole-Repository Absence Scan
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
+risk_levels: [2, 3, 4, 5]
+domains: [blueprint, tests, api]
+triggers: [whole_repository_absence_scan, closed_file_set, cross_unit_test_collision, definition_of_done_red]
+summary: Before closing a unit's edit set, search the repository for whole-repo absence scans the mandated artifact necessarily trips; authorize the scope change or record the collision.
+```
+
+### Invariant
+A blueprint that closes its file set ("no file outside migration_scope may be touched") must show that no pre-existing whole-repository absence/forbidden-pattern scan is tripped by the artifact it mandates. If one is, the scan file enters migration_scope with an explicit bound, or the collision is recorded as a numbered discrepancy with the developer's remedy. Otherwise the unit's Definition of Done (repo test command green, only manifest files changed) is unsatisfiable.
+
+### Role Guidance
+- @Coder: Do not rename a blueprint-mandated field or symbol to slip past a repository absence scan, and do not edit a sibling unit's frozen test that lies outside migration_scope; report the collision as a gap instead.
+
+---
+
+## coder.derived-order-assertion-over-random-keys: List-Order Assertion Over Random Keys Assumes Seeding Order
+
+```yaml
+id: coder.derived-order-assertion-over-random-keys
+title: List-Order Assertion Over Random Keys Assumes Seeding Order
+roles: [Auditor, Coder]
+steps: [implementation, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [tests, api]
+triggers: [list_order_assertion, random_uuid_fixtures, sorted_collaborator_output, flaky_test]
+summary: A test asserting list order over uuid.New() keys must derive the expected order from the sort rule; comparing against seeding order flakes about half the time.
+```
+
+### Invariant
+When a test's fixtures are keyed by randomly generated identifiers (uuid.New()) and the collaborator returns them in a derived order (sorted by identifier), the expected order must be derived by the test from the same rule — sorting the seeded keys, or comparing the set plus the collaborator's own returned order. Asserting seeded/insertion order against a sorted result fails about half the runs against a fully compliant implementation.
+
+### Role Guidance
+- @Coder: In a test whose collaborator returns a derived order, build the expectation from the same ordering rule — sort the seeded keys before comparing, or compare the element-ID set and the collaborator's own returned order; never assume seeding order equals returned order when keys come from uuid.New().
+
+---
+
+## architect.prescribed-test-construction-must-match-the-code-it-names: Prescribed Test Construction Must Type-Check Against The Code It Names
+
+```yaml
+id: architect.prescribed-test-construction-must-match-the-code-it-names
+title: Prescribed Test Construction Must Type-Check Against The Code It Names
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_draft, blueprint_audit]
+risk_levels: [3, 4, 5]
+domains: [blueprint, tests]
+triggers: [prescribed_constructor_returns_port_interface, test_scaffolding_would_not_compile, prescribed_helper_signature_mismatch]
+summary: Blueprint-prescribed test scaffolding must match each named constructor's real signature; a constructor returning the port interface cannot be assigned to a concrete fake pointer.
+```
+
+### Invariant
+Every constructor, receiver, parameter list and result list a blueprint prescribes for a test file must be the one the named code actually has. A frozen test built on a construction that does not type-check cannot be satisfied by any change the blueprint permits, so it fails at implementation and reopens the blueprint; likewise a helper whose prescribed usage contradicts the language (comparing `reflect`'s alphabetically sorted interface methods by declaration index) is unsatisfiable by a compliant implementation.
+
+### Role Guidance
+- @Coder: Finish BLOCKED naming the prescribed call whose type does not match the code, rather than inventing a shim, a constructor change, or an undeclared fake member.
+
+---
+
+## architect.restated-rule-predicates-must-match-across-sections: Cross-Section Rule Restatements Must Use the Pseudocode's Predicate
+
+```yaml
+id: architect.restated-rule-predicates-must-match-across-sections
+title: Cross-Section Rule Restatements Must Use the Pseudocode's Predicate
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
+risk_levels: [4, 5]
+domains: [blueprint, implementation]
+unit_domains: [api]
+triggers: [closed_state_transition_table, closed_failure_alphabet, mandatory_assertion_restates_pseudocode, ordering_invariant_permission_check, outcome_mapping_multiple_sections]
+summary: A rule restated across blueprint sections by a positional proxy rather than the pseudocode's predicate double-maps one reachable input and authorizes reordered implementations.
+```
+
+### Invariant
+Where a blueprint states one outcome or ordering rule in several closed sections (Mandatory Assertion, State Transition Table, outcome alphabet), every restatement must use the same semantic predicate and apply at the same step the pseudocode places it; no reachable input may fall in two rows with different canonical outcomes, and no table row may assert an observable (e.g. "zero permission calls") that the pseudocode's own step order contradicts.
+
+### Role Guidance
+- @Coder: Where the pseudocode and a table row disagree about which step a failure occurs at, the pseudocode's step order governs and the source-law ordering obligation (e.g. permission before data read) must not be reordered to satisfy the table; finish BLOCKED naming the two sections instead.
+
+---
+
+## architect.narrowed-inherited-absence-scan-must-assert-its-scan-set: A Narrowed Inherited Absence Scan Must Assert Its Own Scan Set
+
+```yaml
+id: architect.narrowed-inherited-absence-scan-must-assert-its-scan-set
+title: A Narrowed Inherited Absence Scan Must Assert Its Own Scan Set
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_draft, blueprint_audit, code_audit]
+risk_levels: [4, 5]
+domains: [blueprint, implementation, tests]
+unit_domains: [api, agent-infra]
+triggers: [amend_frozen_repository_wide_test, scope_absence_scan_to_packages, conflict_with_sibling_invariant]
+summary: When a unit narrows another unit's whole-repository absence test to a declared scan set, the blueprint must assert the scan set itself, or the narrowed scan passes vacuously while the sibling invariant silently dies.
+```
+
+### Invariant
+A blueprint that resolves a conflict with a frozen repository-wide absence invariant by scoping that scan to a declared set of paths must make the scan set itself an observable: an assertion that the amended scan walks exactly those declared paths, each of which exists. Then a narrowing to an empty, renamed or over-narrow set fails, and the invariant keeps provable force over the paths it was narrowed to. The amended test's synthetic-tree subtest proves only the scanner logic, never the scan set.
+
+### Role Guidance
+- @Coder: Do not narrow an inherited scan beyond the paths the blueprint declares, and do not delete the scan's self-exclusion or its synthetic-tree subtest to make it green: those are what keep a narrowed invariant falsifiable.
+
+---
+
+## coder.aliasing-non-mutation-assertion-hides-mutation: Non-mutation assertion compared against the double's stored object cannot fail
+
+```yaml
+id: coder.aliasing-non-mutation-assertion-hides-mutation
+title: Non-mutation assertion compared against the double's stored object cannot fail
+roles: [Coder, Auditor]
+steps: [implementation, code_audit]
+risk_levels: [2, 3, 4, 5]
+domains: [tests]
+triggers: [non_mutation_assertion, side_effect_absence_assertion, fake_stores_seeded_pointer]
+summary: A "writes nothing" check that re-reads a double and compares against the value it seeded cannot fail when the double stores the seeded pointer: snapshot values before the call.
+```
+
+### Invariant
+A non-mutation / no-side-effect assertion is falsifiable only when its expectation is a value snapshot (or literal) taken BEFORE the call and it runs on every path the assertion names, covering the collaborator's whole observable state including the record count. If the test double keeps the caller's pointer (a map keyed by ID storing the seeded struct pointer), the seeded value IS the stored object, so any after-only re-read compared against it passes against an implementation that writes, updates or deletes.
+
+### Role Guidance
+- @Coder: When a mandatory assertion says a path must not write or publish: copy the fields the assertion names (plus the stored record count) out of the collaborator into a local value before the act, or seed a copy and assert literals after; never compare a re-read against the struct you passed to Save*/seeded, because pointer-storing fakes make that self-comparison. Run it over a success and a failure case of every operation the assertion names, not one representative path.
+
+---
+
+## shared.created-sibling-breaks-frozen-closed-set-scan: Created Sibling Breaks A Frozen Closed-Set Assertion
+
+```yaml
+id: shared.created-sibling-breaks-frozen-closed-set-scan
+title: Created Sibling Breaks A Frozen Closed-Set Assertion
+roles: [Architect, Auditor, Coder]
+steps: [blueprint_audit, implementation, code_audit]
+risk_levels: [2, 3, 4, 5]
+domains: [tests, blueprint]
+triggers: [creates_new_sibling_directory_or_file, frozen_test_enumerates_closed_set, migration_scope_missing_test_update, blueprint_forbids_editing_tests]
+summary: A unit that creates a new sibling under a path a frozen test enumerates as a closed set must own that test's expectation update, or defer it explicitly with the red-gate interval disclosed.
+```
+
+### Invariant
+Every structural test whose expected set grows because of this unit's new file or directory is a manifest entry (modify) or an explicit deferred hand-off; a unit may not both add the member and forbid the edit that admits it.
+
+### Role Guidance
+- @Coder: If creating a declared file turns a test outside the declared scope red because that test counts the directory or set you joined, stop and report it rather than editing the unowned test or dropping the required file.
+
+---
+
+## shared.source-scan-needle-must-pin-its-clause: Source-Scan Needle Must Pin Its Own Clause
+
+```yaml
+id: shared.source-scan-needle-must-pin-its-clause
+title: Source-Scan Needle Must Pin Its Own Clause
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, blueprint_audit, implementation, code_audit]
+risk_levels: [2, 3, 4, 5]
+domains: [tests, blueprint, implementation]
+triggers: [source_scan_contract_assertion, multi_clause_behaviour_assertion, presence_needle_for_multi_site_literal, blueprint_test_scope_prescribes_needles]
+summary: A test that reads a file's source covers a behaviour clause only with a needle that pins that clause's site, never a token every implementation or another clause's path contains.
+```
+
+### Invariant
+When a Mandatory Assertion names several behaviour clauses (panics on X, cancels on Y, exits on Z) and is discharged by a test that reads the file's own source (a `main()` entrypoint has no runtime seam), each clause needs a needle only that clause satisfies: the exact statement (`signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)`), an occurrence count the Blueprint's pseudocode fixes (`strings.Count(src, "cancelFunc()") == 2`), or the adjacency of the guarded call and its handler (`if err != nil {` then `panic(err)`). A bare token such as `panic(` or `cancelFunc()` is present in any plausible implementation, and a literal that also occurs on another clause's path is satisfied by that occurrence, so an implementation that drops the clause still passes.
+
+### Role Guidance
+- @Coder: Before freezing a source-scan test, list every occurrence of each asserted literal in the target file; for a literal that occurs more than once, assert the count or the adjacency, not `Contains`, and prove each clause by deleting its statement from a scratch copy and watching the test fail. Never invent a literal the Blueprint does not give.
+
+---
+
+## architect.mandatory-assertion-unmapped-in-test-scope: Mandatory Assertion With No Test Named For It In Test Scope
+
+```yaml
+id: architect.mandatory-assertion-unmapped-in-test-scope
+title: Mandatory Assertion With No Test Named For It In Test Scope
+roles: [Architect, Coder, Auditor]
+steps: [blueprint_draft, implementation, code_audit]
+risk_levels: [1, 2, 3, 4, 5]
+domains: [blueprint, tests, infra]
+triggers: [mandatory_assertion_without_named_test, test_scope_lists_extensions_only, absence_assertion_uncovered]
+summary: Every mandatory assertion must be mapped to a named test in Test Scope, or the Coder ships it unverified: the Coder writes to the test list, not the assertion list.
+```
+
+### Invariant
+# Test Scope must account for every id in # Mandatory Assertions: each one either names the test (new or extended) that verifies it, or is explicitly declared a code_audit-only bound check. Absence-shaped and carried-over assertions are the ones usually dropped, because no Test Scope bullet names a file for them, and they ship unfalsifiable: a suite written to the Test Scope list passes green while the assertion's own text is contradicted.
+
+### Role Guidance
+- @Coder: Before freeze_tests, walk the # Mandatory Assertions list itself, not only the # Test Scope bullets: for each assertion, name the test that would fail if its fact were removed, and add the missing assertion (inside the already-declared test files) instead of assuming the scope list is complete. Absence clauses (no ENTRYPOINT, no env literal, no queue-shaped key) need an explicit read-and-assert.
