@@ -3,36 +3,40 @@
 Shared anti-pattern knowledge base for the [Nexus Swarm](https://github.com/alberto-velo/agentic-infra) agent pipeline.
 
 The Nexus Swarm runs one AI agent per pipeline step (Roadmap Agent, Risk Agent, Architect,
-Auditor, Coder) to assist with feature development. During each run, the Auditor logs reusable root causes it
-encounters. This repo is where those patterns accumulate, get reviewed, and propagate to the
-whole team.
+Auditor, Coder) to assist with feature development. During each run, the Auditor logs reusable
+root causes it encounters. This repo is where those patterns accumulate, get reviewed, and
+propagate to the whole team.
 
 ---
 
 ## How it works
 
-1. **Auditor proposes** — during an audit step, if the Auditor finds a reusable root cause
-   it calls its `propose_anti_pattern` tool with the fields of a registry entry (id, roles,
-   steps, risk levels, one instruction per role, …) plus the evidence. The runner checks the
-   entry against this repo's format — a retired role or step, a role without an instruction,
-   or an id already here is refused — and records it in `proposed_anti_patterns.json` in the
-   local workspace. The developer can delete any proposal there that does not hold.
-2. **`nexus complete` opens the PR** — at the end of a feature run, the runner clones this
-   repo, creates the branch `nexus/proposals/<feature>`, adds each entry to the file of every
-   role it lists, validates the registry, pushes, and opens the PR with the GitHub CLI, the
-   evidence in its body. Running it again rebuilds the branch and updates the open PR.
+1. **Auditor proposes** — during an audit step, if the Auditor finds a reusable root cause that
+   no rule in force already covers, it calls its `propose_anti_pattern` tool with the fields of
+   an entry (the file it belongs in, a name, title, domains, the lowest risk level it binds at,
+   and the rule text) plus the evidence. The runner checks the entry against this repo's format
+   — a malformed entry or an id already here is refused — and records it in
+   `proposed_anti_patterns.json` in the local workspace. The developer can delete any proposal
+   there that does not hold.
+2. **`nexus submit` opens the PR** — at the end of a feature run, the runner clones this repo,
+   creates the branch `nexus/proposals/<feature>`, appends each entry once to the file it names,
+   validates the registry, pushes, and opens the PR with the GitHub CLI. The PR body shows each
+   rule as it will be in force, the run's evidence under it (context for review, not part of the
+   rule), and each changed file's rule count and size before and after. Running it again
+   rebuilds the branch and updates the open PR.
 3. **Human reviews** — a team member reads the PR, edits or drops noisy entries on its branch,
-   and merges.
+   and merges. When a file grows, merge overlapping rules or retire ones that no longer earn
+   their place.
 4. **Rules propagate** — on the next `nexus update-governance` / `nexus bootstrap`, the runner
-   pulls the latest commit from this repo and injects the entries relevant to each agent step
-   into that step's handoff.
+   pulls the latest commit from this repo and puts every rule that applies to a step into that
+   step's handoff.
 
 No rule takes effect until it is merged. Unreviewed auto-learning never reaches the pipeline.
 
 Opening the PR needs push access to this repo and an authenticated `gh` (`gh auth login`) on
-the developer's machine. Without them, `nexus complete` warns, says what it did (for example,
+the developer's machine. Without them, `nexus submit` warns, says what it did (for example,
 the branch was pushed and here is the link to open the PR), and keeps the proposals for a
-re-run. `nexus complete --no-governance-pr` skips the PR.
+re-run. `nexus submit --no-governance-pr` skips the PR.
 
 ---
 
@@ -40,67 +44,58 @@ re-run. `nexus complete --no-governance-pr` skips the PR.
 
 ```
 anti_patterns/
-  roadmap.md           ← patterns for the Roadmap Agent (roadmap_draft)
-  risk.md              ← patterns for the Risk Agent (risk_classification)
-  architect.md         ← patterns for the Architect (blueprint_draft)
-  auditor.md           ← patterns for the Auditor (blueprint_audit, code_audit)
-  coder.md             ← patterns for the Coder (implementation: the unit's tests, then its code)
-  shared.md            ← cross-role patterns, read by every agent
-CHANGELOG.md           ← record of significant rule changes
+  architect.md   ← mistakes in the blueprint          — read at blueprint_draft, blueprint_audit
+  coder.md       ← mistakes in the unit's tests/code  — read at implementation, code_audit
+  shared.md      ← mistakes either author makes       — read at all four steps above
+  auditor.md     ← mistakes of an audit itself        — read at blueprint_audit, code_audit
+CHANGELOG.md     ← record of significant rule changes
 ```
 
-One file per agent role; the runner reads exactly these files and refuses a registry that
-still has a retired role file (`staff-engineer.md`, `qa-sdet.md`). An entry may appear in more
-than one role file when the same invariant has different role-specific guidance — IDs remain
-stable across files, and each copy carries that role's guidance line. Entries the runner adds
-from a proposal follow this convention: one copy in the file of every role the entry lists.
+Each rule is in exactly one file, and the file is whose mistake the rule prevents — which is who
+reads it. An audit reads the rules of the work it judges, `shared.md` and `auditor.md`; it never
+reads the other author's rules. The Roadmap and Risk agents read none. A step receives **every**
+rule in its files that applies to the unit's domain and risk level — nothing is ranked or cut,
+so what a file holds is what its readers get.
+
+The runner refuses a registry in an earlier layout (one file per role, each rule copied into the
+file of every role it listed).
 
 ---
 
 ## Entry format
 
-Each entry is a markdown section with an embedded YAML metadata block:
-
 ````markdown
-## scope.my-new-pattern: Short Title
+## coder.my-new-pattern: Short Title
 
 ```yaml
-id: scope.my-new-pattern
+id: coder.my-new-pattern
 title: Short Title
-roles: [Coder, Auditor]
-steps: [implementation, code_audit]
-risk_levels: [1, 2, 3, 4, 5]
-domains: [code]
-unit_domains: [api]
-triggers: [short_trigger_name]
-summary: One concise sentence — injected into agent handoffs.
+domains: [api, frontend]
+from_level: 1
 ```
 
-### Invariant
-The reusable invariant at risk.
-
-### Role Guidance
-- @Coder: Concrete instruction for this role.
-- @Auditor: What to check and how to fail it.
+What goes wrong, and what to do instead.
 ````
 
-**Required fields:** id, title, roles, steps, risk_levels, domains, triggers, summary
-(`unit_domains` is optional; omit it when the rule applies in every domain).
+- **id** — `<file>.<kebab-name>`; the prefix is the file the entry is in.
+- **domains** — the unit domains where the mistake can happen: `api`, `frontend`, `agent-infra`,
+  `infra`, or `[all]` on its own for a rule that does not depend on the kind of code. Required.
+- **from_level** — the lowest risk level (0-5) the rule binds at.
+- **the rule** — plain text after the block, true in any repository: it names the kind of thing,
+  never a unit, file or identifier of the codebase where it was found. No `#` headings, `---`
+  lines or code fences inside it. A rule that holds for one language only says so.
 
-See `anti_patterns/README.md` for the full field reference and validation instructions.
+These four fields are the whole format; anything else is refused.
 
 ---
 
 ## Adding a rule manually
 
-If you spot a recurring pattern that isn't being caught, you can add it directly:
-
-1. Open the relevant `anti_patterns/<role>.md` (or `shared.md` for a cross-role rule).
-2. Add an entry following the format above.
-3. Validate it locally from this repo's root: `nexus anti-patterns validate --registry-root
+1. Add the entry to the file of the role whose mistake it prevents.
+2. Validate it locally from this repo's root: `nexus anti-patterns validate --registry-root
    anti_patterns` — there is no CI check on this repo.
-4. Open a PR — title: `feat(antipatterns): add <id>`.
-5. Get a single teammate approval and merge.
+3. Open a PR — title: `feat(antipatterns): add <id>`.
+4. Get a single teammate approval and merge.
 
 The rule will be active for the whole team on their next `nexus update-governance`.
 
