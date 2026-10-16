@@ -105,3 +105,16 @@ from_level: 0
 ```
 
 A pipeline artifact that serves as a handoff contract must be found at one canonical path, or through a deterministic entrypoint — never by searching the filesystem. Write such artifacts at their canonical path, and never work from a fragment found by search.
+
+---
+
+## shared.toolchain-command-rewrites-pinned-files: Repository-Wide Toolchain Command Rewrites Files The Unit's Contract Pins
+
+```yaml
+id: shared.toolchain-command-rewrites-pinned-files
+title: Repository-Wide Toolchain Command Rewrites Files The Unit's Contract Pins
+domains: [all]
+from_level: 1
+```
+
+A repository-wide toolchain or formatting command (dependency tidy/download, formatter, import rewinder) run in a working copy whose line endings or normalization settings differ from the committed blobs rewrites files the unit's contract pins as untouched — usually as an invisible line-ending-only diff. That diff is a change outside the unit's manifest and can reach the commit, and detecting and reverting it costs a long detour. Run such commands only where the unit is allowed to change files; after any of them, compare every pinned file against HEAD and, when the only difference is line endings or normalization, restore the file from its HEAD blob rather than leaving the rewrite or hand-editing it. Never let a toolchain-side-effect file appear in the unit's diff.

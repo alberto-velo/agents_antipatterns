@@ -287,3 +287,16 @@ from_level: 0
 ```
 
 A path the public surface registers in a list file, or asserts content of, must exist in the tree the unit starts from or be an entry of the unit; the mechanical checks validate only declared entries. Check each named path; when one is missing, declare it as a create with its content pinned, or drop it and record the absence as a discrepancy. Never state a count over list members you have not checked.
+
+---
+
+## architect.mandatory-assertion-on-a-file-the-unit-does-not-edit: Mandatory Assertion Quotes A Value From An Untouched Sibling File
+
+```yaml
+id: architect.mandatory-assertion-on-a-file-the-unit-does-not-edit
+title: Mandatory Assertion Quotes A Value From An Untouched Sibling File
+domains: [all]
+from_level: 1
+```
+
+A mandatory assertion or public-surface fact about a file the unit does not create and does not edit states something no compliant implementation can change — and when it is quoted wrong (a value read off a line number instead of the key path it sits under, or a neighbouring block mistaken for the one being discussed: a request value read as a limit, a comment line read as a declaration), it becomes an assertion the tree already contradicts. Two bad outcomes follow: the executor's only way to satisfy it is an out-of-scope edit to that sibling file, often re-introducing exactly what a review comment asked to remove; and a "these suites must stay green" list may name a suite that is already red at unit entry, so the whole non-regression claim is dropped and the scoping guarantee ships unverified. Keep such values out of the assertion list: bind them in the entry's note or in Explicit Constraints as "this file is not modified", verify that bound at code audit against the unit's own diff, and quote a sibling value only from its key path after reading the file — never from a line number, and never in a form that contradicts the blueprint's own record of pre-existing debt.
