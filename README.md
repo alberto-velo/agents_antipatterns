@@ -13,7 +13,7 @@ propagate to the whole team.
 
 1. **Auditor proposes** — during an audit step, if the Auditor finds a reusable root cause that
    no rule in force already covers, it calls its `propose_anti_pattern` tool with the fields of
-   an entry (the file it belongs in, a name, title, domains, the lowest risk level it binds at,
+   an entry (the file it belongs in, a name, title, path patterns, the lowest risk level it binds at,
    and the rule text) plus the evidence. The runner checks the entry against this repo's format
    — a malformed entry or an id already here is refused — and records it in
    `proposed_anti_patterns.json` in the local workspace. The developer can delete any proposal
@@ -54,7 +54,7 @@ CHANGELOG.md     ← record of significant rule changes
 Each rule is in exactly one file, and the file is whose mistake the rule prevents — which is who
 reads it. An audit reads the rules of the work it judges, `shared.md` and `auditor.md`; it never
 reads the other author's rules. The Roadmap and Risk agents read none. A step receives **every**
-rule in its files that applies to the unit's domain and risk level — nothing is ranked or cut,
+rule in its files that applies to the unit's paths and risk level — nothing is ranked or cut,
 so what a file holds is what its readers get.
 
 The runner refuses a registry in an earlier layout (one file per role, each rule copied into the
@@ -70,7 +70,7 @@ file of every role it listed).
 ```yaml
 id: coder.my-new-pattern
 title: Short Title
-domains: [api, frontend]
+paths: ["**/*.go", "Dockerfile*"]
 from_level: 1
 ```
 
@@ -78,8 +78,12 @@ What goes wrong, and what to do instead.
 ````
 
 - **id** — `<file>.<kebab-name>`; the prefix is the file the entry is in.
-- **domains** — the unit domains where the mistake can happen: `api`, `frontend`, `agent-infra`,
-  `infra`, or `[all]` on its own for a rule that does not depend on the kind of code. Required.
+- **paths** — the kinds of file where the mistake can happen, as repo-relative glob patterns
+  matched case-sensitively against the paths a unit changes: `*` stays within a folder, `**/`
+  matches any number of folders, and a pattern without `/` matches a file name in any folder
+  (`"**/*.go"`, `"**/*.tsx"`, `"Dockerfile*"`, `".github/workflows/*.yml"`). `[all]` on its own
+  for a rule that does not depend on the kind of file. A pattern names a kind of file, never one
+  repository's folders. Before a unit's file list exists, every rule applies. Required.
 - **from_level** — the lowest risk level (0-5) the rule binds at.
 - **the rule** — plain text after the block, true in any repository: it names the kind of thing,
   never a unit, file or identifier of the codebase where it was found. No `#` headings, `---`

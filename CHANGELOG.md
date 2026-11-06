@@ -2,6 +2,18 @@
 
 Record significant changes to anti-pattern rules.
 
+## 2026-11-06 — rules are scoped by file paths, not domains (nexus §105)
+
+- Format: `domains` is replaced by `paths`, a list of repo-relative glob patterns matched against
+  the paths a unit changes, or `[all]`. Nexus no longer has unit domains: it detects the
+  technologies in a repository instead.
+- Every entry is now `paths: [all]`. The 16 entries that were scoped to `agent-infra`, `api` or
+  `infra` state language-neutral rules, and a domain named the kind of repository, not a kind of
+  file, so no pattern follows from it. Narrow an entry to the files it concerns as reviews show
+  where it is noise.
+- A §105 Nexus release refuses the previous registry, and an earlier release refuses this one.
+  Merge this with the runner release.
+
 ## 2026-10-15 — each rule once, in the file of whose mistake it is (nexus §99)
 
 - Layout: four files — `architect.md`, `coder.md`, `shared.md` (either author), `auditor.md`
