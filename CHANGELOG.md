@@ -2,6 +2,18 @@
 
 Record significant changes to anti-pattern rules.
 
+## 2026-11-06 — no domains: rules hold in any repository (nexus §105)
+
+- Format: `domains` is removed with no replacement. An entry is `id`, `title`, `from_level` and
+  the rule; the file it is in still decides which agent reads it. Nexus no longer has unit domains.
+- Read rule by rule, 51 of the 53 entries hold in any stack, including 14 of the 16 that were
+  domain-scoped; the other two say their language in their text.
+- A practice of one repository or team belongs in that repository's `nexus-context.md`, under
+  `## Conventions`. Scoping rules here, by team or by area such as firmware, waits until a
+  handoff carries rules that do not apply to its repository.
+- A §105 Nexus release refuses the previous registry, and an earlier release refuses this one.
+  Merge this with the runner release.
+
 ## 2026-10-15 — each rule once, in the file of whose mistake it is (nexus §99)
 
 - Layout: four files — `architect.md`, `coder.md`, `shared.md` (either author), `auditor.md`

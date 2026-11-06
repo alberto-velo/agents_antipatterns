@@ -9,7 +9,6 @@ Mistakes either author can make on their own. Read by the Architect, the Coder a
 ```yaml
 id: shared.security-metadata-open-type
 title: Open Types In Access-Control Fields
-domains: [all]
 from_level: 4
 ```
 
@@ -22,7 +21,6 @@ An unconstrained string or number in an access-control field lets unexpected val
 ```yaml
 id: shared.security-boundary-fail-open
 title: Security Boundary Fails Open
-domains: [all]
 from_level: 4
 ```
 
@@ -35,7 +33,6 @@ Malformed or unexpected input at a security boundary must be denied, never fall 
 ```yaml
 id: shared.format-mandate-breaks-byte-identity
 title: Formatter Mandate Contradicts A Byte-Identity Assertion
-domains: [all]
 from_level: 0
 ```
 
@@ -48,7 +45,6 @@ A formatter run on every changed file rewrites pre-existing formatting defects i
 ```yaml
 id: shared.test-literal-trips-forbidden-token-scan
 title: Asserted Literal Trips A Repository-Wide Forbidden-Token Scan
-domains: [all]
 from_level: 0
 ```
 
@@ -61,7 +57,6 @@ A test that states, as one contiguous literal, a value containing a token an exi
 ```yaml
 id: shared.reflection-cannot-report-declaration-order
 title: Reflection Cannot Report Declaration Order (Go)
-domains: [all]
 from_level: 2
 ```
 
@@ -74,7 +69,6 @@ Go's reflection lists an interface's methods sorted by name, whatever order they
 ```yaml
 id: shared.source-scan-needle-must-pin-its-clause
 title: Source-Scan Needle Satisfied By Any Implementation
-domains: [all]
 from_level: 2
 ```
 
@@ -87,7 +81,6 @@ When an assertion with several behaviour clauses is checked by reading a file's 
 ```yaml
 id: shared.mandatory-assertion-without-a-test
 title: Mandatory Assertion With No Test That Checks It
-domains: [all]
 from_level: 0
 ```
 
@@ -100,7 +93,6 @@ The tests are written from the test list, so an assertion no listed test covers 
 ```yaml
 id: shared.canonical-artifact-path-drift
 title: Handoff Artifact Away From Its Canonical Path
-domains: [agent-infra]
 from_level: 0
 ```
 

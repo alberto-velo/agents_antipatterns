@@ -10,8 +10,8 @@ exactly one file, and the file decides who reads it:
 | `shared.md` | either author, on their own | all four steps above |
 | `auditor.md` | an audit itself | `blueprint_audit`, `code_audit` |
 
-A step receives every rule in its files whose `domains` hold the unit's domain and whose
-`from_level` is at or below the unit's risk level.
+A step receives every rule in its files whose `from_level` is at or below the unit's risk level.
+Every rule reaches every repository.
 
 The entry format is in the [repository README](../README.md#entry-format).
 
