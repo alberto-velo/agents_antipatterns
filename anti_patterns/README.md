@@ -10,7 +10,7 @@ exactly one file, and the file decides who reads it:
 | `shared.md` | either author, on their own | all four steps above |
 | `auditor.md` | an audit itself | `blueprint_audit`, `code_audit` |
 
-A step receives every rule in its files whose `paths` match a path the unit changes and whose
+A step receives every rule in its files whose `stacks` meet the unit's stacks and whose
 `from_level` is at or below the unit's risk level.
 
 The entry format is in the [repository README](../README.md#entry-format).

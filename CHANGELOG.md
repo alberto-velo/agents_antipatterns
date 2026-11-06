@@ -2,15 +2,16 @@
 
 Record significant changes to anti-pattern rules.
 
-## 2026-11-06 — rules are scoped by file paths, not domains (nexus §105)
+## 2026-11-06 — rules are scoped by stack, not domain (nexus §105)
 
-- Format: `domains` is replaced by `paths`, a list of repo-relative glob patterns matched against
-  the paths a unit changes, or `[all]`. Nexus no longer has unit domains: it detects the
-  technologies in a repository instead.
-- Every entry is now `paths: [all]`. The 16 entries that were scoped to `agent-infra`, `api` or
-  `infra` state language-neutral rules, and a domain named the kind of repository, not a kind of
-  file, so no pattern follows from it. Narrow an entry to the files it concerns as reviews show
-  where it is noise.
+- Format: `domains` is replaced by `stacks`, ids of what Nexus detects in a repository — a
+  language, an ecosystem, a framework or a deployment technology — or `[all]`. Nexus no longer
+  has unit domains: it detects the stacks, and a rule reaches a unit whose stacks it names.
+- The 16 domain-scoped entries keep their reach: `agent-infra` (the Nexus runner) became
+  `[litellm]`, `api` the backend frameworks (`fastapi`, `flask`, `django`, `starlette`,
+  `express`, `nestjs`, `fastify`, `gin`, `echo`, `fiber`, `axum`, `actix`), `infra` the
+  deployment technologies (`docker`, `docker-compose`, `kubernetes`, `kustomize`, `helm`,
+  `github-actions`, `gitlab-ci`, `jenkins`, `terraform`). `[all]` entries are unchanged.
 - A §105 Nexus release refuses the previous registry, and an earlier release refuses this one.
   Merge this with the runner release.
 
