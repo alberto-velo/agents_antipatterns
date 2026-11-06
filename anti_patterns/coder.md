@@ -9,7 +9,6 @@ Mistakes in the unit's tests or code. Read by the Coder at `implementation` and 
 ```yaml
 id: coder.ghost-coverage-placeholder-tests
 title: Placeholder Or Uncollected Tests Counted As Coverage
-stacks: [all]
 from_level: 0
 ```
 
@@ -22,7 +21,6 @@ A test counts only when an executable assertion is collected and run. A body tha
 ```yaml
 id: coder.non-falsifying-contract-assertion
 title: Test That Cannot Fail Against A Broken Implementation
-stacks: [all]
 from_level: 0
 ```
 
@@ -35,7 +33,6 @@ A test that only proves a scenario ran passes against an implementation that omi
 ```yaml
 id: coder.unreachable-mocked-failure-path
 title: Mocked Failure Path Never Reached
-stacks: [all]
 from_level: 0
 ```
 
@@ -48,7 +45,6 @@ A test of a downstream failure path can fail earlier — on invalid preceding in
 ```yaml
 id: coder.mocked-composition-misses-public-symbol
 title: Public Symbol Covered Only Through A Mock
-stacks: [all]
 from_level: 4
 ```
 
@@ -61,7 +57,6 @@ An entrypoint test that mocks a public dependency does not verify that dependenc
 ```yaml
 id: coder.hardening-blocks-authorized-input
 title: Hardening That Rejects Authorized Input
-stacks: [all]
 from_level: 3
 ```
 
@@ -74,7 +69,6 @@ Tightened validation is a regression when it rejects an input shape the contract
 ```yaml
 id: coder.convenience-api-erases-probe-semantics
 title: Convenience API Erases A Required Failure Branch
-stacks: [litellm]
 from_level: 4
 ```
 
@@ -87,7 +81,6 @@ A helper that collapses an I/O failure into "not found" or false erases a branch
 ```yaml
 id: coder.constructor-bypasses-schema-validation
 title: Untrusted Data Built Through A Constructor
-stacks: [litellm]
 from_level: 3
 ```
 
@@ -100,7 +93,6 @@ Building a model from decoded untrusted data through its constructor can raise a
 ```yaml
 id: coder.defensive-fallback-branch-omitted
 title: Declared Fallback Branch Dropped
-stacks: [all]
 from_level: 4
 ```
 
@@ -113,7 +105,6 @@ A fallback branch the blueprint declares is part of the contract even when earli
 ```yaml
 id: coder.side-effect-invariant-unproven
 title: Side-Effect Obligation Asserted Through The Return Value
-stacks: [all]
 from_level: 4
 ```
 
@@ -126,7 +117,6 @@ A correct payload does not prove that a forbidden call was not made, that orderi
 ```yaml
 id: coder.import-masking-hides-failure
 title: Test Import Failure Masked
-stacks: [litellm]
 from_level: 0
 ```
 
@@ -139,7 +129,6 @@ A test that wraps the import of the code under test in a fallback passes green w
 ```yaml
 id: coder.test-invents-unlicensed-contract
 title: Test Asserts A Contract The Blueprint Does Not Give
-stacks: [all]
 from_level: 3
 ```
 
@@ -152,7 +141,6 @@ A test validates the contract only when everything it asserts traces back to the
 ```yaml
 id: coder.partial-structured-error-assertion
 title: Structured Error Asserted On One Field
-stacks: [all]
 from_level: 3
 ```
 
@@ -165,7 +153,6 @@ When the contract defines a structured error, checking one convenient field lets
 ```yaml
 id: coder.state-matrix-subcomponent-only-coverage
 title: State Rows Tested Only At A Helper
-stacks: [all]
 from_level: 4
 ```
 
@@ -178,7 +165,6 @@ A helper test does not prove that the public entrypoint emits the right payload 
 ```yaml
 id: coder.anchored-regex-whole-file-matcher
 title: Line-Anchored Pattern Matched Against A Whole File
-stacks: [all]
 from_level: 0
 ```
 
@@ -191,7 +177,6 @@ A line-shape pattern (^...$) applied with a whole-string matcher anchors to the 
 ```yaml
 id: coder.test-file-static-analysis-gate
 title: Test Files Fail The Repository's Static Analysis
-stacks: [all]
 from_level: 0
 ```
 
@@ -204,7 +189,6 @@ The repository's static-analysis commands collect test files too, and a finding 
 ```yaml
 id: coder.unasserted-carried-over-behaviour
 title: Carried-Over Behaviour Left Unasserted In A Move
-stacks: [all]
 from_level: 0
 ```
 
@@ -217,7 +201,6 @@ When a unit recreates files under new paths, a rewrite loses exactly the facts n
 ```yaml
 id: coder.multi-clause-signal-partially-asserted
 title: Compound Signal Only Partly Asserted
-stacks: [all]
 from_level: 0
 ```
 
@@ -230,7 +213,6 @@ An assertion whose signal names several files, literals or fields is covered onl
 ```yaml
 id: coder.layering-assertion-without-matching-scan
 title: Layering Assertion Without A Scan That Can Match It
-stacks: [litellm, fastapi, flask, django, starlette, express, nestjs, fastify, gin, echo, fiber, axum, actix]
 from_level: 0
 ```
 
@@ -243,7 +225,6 @@ A dependency-direction or layering rule changes no behaviour, so behavioural and
 ```yaml
 id: coder.derivative-surface-asserts-deltas-only
 title: Mirrored Artifact Asserted Only For Its Differences
-stacks: [all]
 from_level: 2
 ```
 
@@ -256,7 +237,6 @@ When a surface entry is defined as identical to another except for named differe
 ```yaml
 id: coder.derived-order-assertion-over-random-keys
 title: Order Assertion Over Randomly Generated Keys
-stacks: [all]
 from_level: 0
 ```
 
@@ -269,7 +249,6 @@ When fixtures are keyed by randomly generated identifiers and the code returns t
 ```yaml
 id: coder.aliasing-non-mutation-assertion
 title: No-Write Assertion Compared Against The Double's Own Object
-stacks: [all]
 from_level: 2
 ```
 

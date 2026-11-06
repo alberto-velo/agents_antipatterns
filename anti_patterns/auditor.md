@@ -9,7 +9,6 @@ Mistakes of an audit itself. Read by the Auditor at `blueprint_audit` and `code_
 ```yaml
 id: auditor.prove-coverage-by-mutation
 title: Test Coverage Judged By Reading Instead Of Mutating
-stacks: [all]
 from_level: 0
 ```
 
@@ -22,7 +21,6 @@ Whether a test covers an assertion is decided by breaking what it covers, not by
 ```yaml
 id: auditor.absence-signal-hit-in-test-literal
 title: Absence Signal Hit In A Test Literal Treated As A Violation
-stacks: [all]
 from_level: 0
 ```
 

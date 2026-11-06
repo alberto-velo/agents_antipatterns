@@ -2,16 +2,15 @@
 
 Record significant changes to anti-pattern rules.
 
-## 2026-11-06 — rules are scoped by stack, not domain (nexus §105)
+## 2026-11-06 — no domains: rules hold in any repository (nexus §105)
 
-- Format: `domains` is replaced by `stacks`, ids of what Nexus detects in a repository — a
-  language, an ecosystem, a framework or a deployment technology — or `[all]`. Nexus no longer
-  has unit domains: it detects the stacks, and a rule reaches a unit whose stacks it names.
-- The 16 domain-scoped entries keep their reach: `agent-infra` (the Nexus runner) became
-  `[litellm]`, `api` the backend frameworks (`fastapi`, `flask`, `django`, `starlette`,
-  `express`, `nestjs`, `fastify`, `gin`, `echo`, `fiber`, `axum`, `actix`), `infra` the
-  deployment technologies (`docker`, `docker-compose`, `kubernetes`, `kustomize`, `helm`,
-  `github-actions`, `gitlab-ci`, `jenkins`, `terraform`). `[all]` entries are unchanged.
+- Format: `domains` is removed with no replacement. An entry is `id`, `title`, `from_level` and
+  the rule; the file it is in still decides which agent reads it. Nexus no longer has unit domains.
+- Read rule by rule, 51 of the 53 entries hold in any stack, including 14 of the 16 that were
+  domain-scoped; the other two say their language in their text.
+- A practice of one repository or team belongs in that repository's `nexus-context.md`, under
+  `## Conventions`. Scoping rules here, by team or by area such as firmware, waits until a
+  handoff carries rules that do not apply to its repository.
 - A §105 Nexus release refuses the previous registry, and an earlier release refuses this one.
   Merge this with the runner release.
 

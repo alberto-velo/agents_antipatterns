@@ -13,7 +13,7 @@ propagate to the whole team.
 
 1. **Auditor proposes** — during an audit step, if the Auditor finds a reusable root cause that
    no rule in force already covers, it calls its `propose_anti_pattern` tool with the fields of
-   an entry (the file it belongs in, a name, title, stacks, the lowest risk level it binds at,
+   an entry (the file it belongs in, a name, title, the lowest risk level it binds at,
    and the rule text) plus the evidence. The runner checks the entry against this repo's format
    — a malformed entry or an id already here is refused — and records it in
    `proposed_anti_patterns.json` in the local workspace. The developer can delete any proposal
@@ -54,7 +54,7 @@ CHANGELOG.md     ← record of significant rule changes
 Each rule is in exactly one file, and the file is whose mistake the rule prevents — which is who
 reads it. An audit reads the rules of the work it judges, `shared.md` and `auditor.md`; it never
 reads the other author's rules. The Roadmap and Risk agents read none. A step receives **every**
-rule in its files that applies to the unit's stacks and risk level — nothing is ranked or cut,
+rule in its files that applies at the unit's risk level — nothing is ranked or cut,
 so what a file holds is what its readers get.
 
 The runner refuses a registry in an earlier layout (one file per role, each rule copied into the
@@ -70,7 +70,6 @@ file of every role it listed).
 ```yaml
 id: coder.my-new-pattern
 title: Short Title
-stacks: [go, docker]
 from_level: 1
 ```
 
@@ -78,19 +77,14 @@ What goes wrong, and what to do instead.
 ````
 
 - **id** — `<file>.<kebab-name>`; the prefix is the file the entry is in.
-- **stacks** — the stacks where the mistake can happen, as Nexus detects them in a repository: a
-  language (`python`, `typescript`, `go`, `c`), an ecosystem (`nodejs`, `cmake`), a framework
-  (`react`, `fastapi`, `gin`, `litellm`) or a deployment technology (`docker`, `kubernetes`,
-  `helm`, `github-actions`). `[all]` on its own for a rule that does not depend on the stack.
-  A rule reaches a unit whose stacks it names: those of the files the unit's blueprint lists,
-  and the repository's before it lists any. An id the runner's detection never names is
-  refused. Required.
 - **from_level** — the lowest risk level (0-5) the rule binds at.
 - **the rule** — plain text after the block, true in any repository: it names the kind of thing,
   never a unit, file or identifier of the codebase where it was found. No `#` headings, `---`
   lines or code fences inside it. A rule that holds for one language only says so.
 
-These four fields are the whole format; anything else is refused.
+These three fields and the rule are the whole format; anything else is refused. Every rule
+reaches every repository, so a rule here must hold in any of them: a practice of one repository
+or team belongs in that repository's `nexus-context.md`, under `## Conventions`.
 
 ---
 

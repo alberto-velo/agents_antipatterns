@@ -9,7 +9,6 @@ Mistakes in the blueprint. Read by the Architect at `blueprint_draft` and by the
 ```yaml
 id: architect.stateful-component-missing-lifecycle
 title: Stateful Component Without Lifecycle Semantics
-stacks: [litellm]
 from_level: 2
 ```
 
@@ -22,7 +21,6 @@ State that persists across task or execution boundaries leaks between runs unles
 ```yaml
 id: architect.unspecified-transformation-path
 title: Unspecified Transformation Path
-stacks: [all]
 from_level: 2
 ```
 
@@ -35,7 +33,6 @@ Where bytes or comparisons matter, two reasonable implementations of an unnamed 
 ```yaml
 id: architect.blueprint-drift-adds-to-source-law
 title: Blueprint Adds To The Source Contract
-stacks: [all]
 from_level: 4
 ```
 
@@ -48,7 +45,6 @@ At L4-5 an addition that looks stricter or more helpful than the source contract
 ```yaml
 id: architect.canonical-observation-channel-missing
 title: Test-Relevant Dependency Or Observation Channel Not Named
-stacks: [all]
 from_level: 3
 ```
 
@@ -61,7 +57,6 @@ When the tests must observe a side effect or build an upstream type, and the blu
 ```yaml
 id: architect.observability-closure-underspecified
 title: Mandatory Side Effect Without A Legal Mechanism
-stacks: [litellm]
 from_level: 4
 ```
 
@@ -74,7 +69,6 @@ A mandatory operational side effect needs both a compliant way to produce it and
 ```yaml
 id: architect.blueprint-missing-transitive-source-law
 title: Normative Detail Left Outside The Blueprint
-stacks: [litellm]
 from_level: 4
 ```
 
@@ -87,7 +81,6 @@ The Coder works from the blueprint alone. A fixture matrix, literal or behaviour
 ```yaml
 id: architect.unanchored-import-surface-preimpl-tests
 title: No Binding For Tests Written Before The Code
-stacks: [litellm]
 from_level: 0
 ```
 
@@ -100,7 +93,6 @@ Tests are written and frozen before the code exists, so they can only reach the 
 ```yaml
 id: architect.hidden-ambient-dependency-pure-interface
 title: Hidden Ambient Dependency In A Declared Pure Interface
-stacks: [all]
 from_level: 3
 ```
 
@@ -113,7 +105,6 @@ A function described as pure or argument-driven must not change behaviour on run
 ```yaml
 id: architect.divergent-validators-closed-failure-alphabet
 title: Closed Failure Alphabet Ignores A Validation Layer
-stacks: [all]
 from_level: 4
 ```
 
@@ -126,7 +117,6 @@ A closed set of failure outcomes must account for every layer that can reject in
 ```yaml
 id: architect.unreachable-operational-transition-restart
 title: Valid Restart Path Never Reaches The Operational State
-stacks: [litellm]
 from_level: 4
 ```
 
@@ -139,7 +129,6 @@ Every successful startup or restart path must say how the system leaves its init
 ```yaml
 id: architect.source-law-uses-nonexistent-upstream-api
 title: Contract Uses An Upstream API That Does Not Exist
-stacks: [litellm]
 from_level: 3
 ```
 
@@ -152,7 +141,6 @@ A unit that composes already-shipped units must consume the APIs they actually e
 ```yaml
 id: architect.unprobed-framework-error-literal
 title: Framework Diagnostic Made Normative Without Probing It
-stacks: [litellm]
 from_level: 4
 ```
 
@@ -165,7 +153,6 @@ Framework error codes, messages, locations and payloads are runtime facts, not d
 ```yaml
 id: architect.incomplete-delete-set-orphan-directory
 title: Relocation Leaves Files Behind In The Old Directory
-stacks: [all]
 from_level: 0
 ```
 
@@ -178,7 +165,6 @@ When a unit moves a directory as create-at-new-path plus delete-at-old, every fi
 ```yaml
 id: architect.raw-grep-absence-signal
 title: Absence Signal That Compliant Code Matches
-stacks: [all]
 from_level: 0
 ```
 
@@ -191,7 +177,6 @@ A repository-wide raw substring search for a retired name necessarily matches th
 ```yaml
 id: architect.unreachable-mandatory-outcome
 title: Mandatory Outcome With No Path That Produces It
-stacks: [fastapi, flask, django, starlette, express, nestjs, fastify, gin, echo, fiber, axum, actix]
 from_level: 3
 ```
 
@@ -204,7 +189,6 @@ For a unit with a closed set of outcomes, each mandated outcome needs a step in 
 ```yaml
 id: architect.closed-edit-set-vs-repo-absence-scan
 title: Closed Edit Set Collides With A Repository-Wide Absence Scan
-stacks: [all]
 from_level: 2
 ```
 
@@ -217,7 +201,6 @@ A blueprint that forbids touching any file outside its entries must check that w
 ```yaml
 id: architect.count-assertion-needs-observation-channel
 title: Quantity Assertion Without A Double That Records It
-stacks: [all]
 from_level: 3
 ```
 
@@ -230,7 +213,6 @@ An assertion is checkable only if the declared test double records the fact it n
 ```yaml
 id: architect.prescribed-test-calls-must-compile
 title: Prescribed Test Code Does Not Match The Code It Names
-stacks: [all]
 from_level: 0
 ```
 
@@ -243,7 +225,6 @@ Tests are frozen before the code exists, so a constructor, receiver call or acce
 ```yaml
 id: architect.restated-rule-predicates-must-match
 title: One Rule Restated With Different Predicates
-stacks: [fastapi, flask, django, starlette, express, nestjs, fastify, gin, echo, fiber, axum, actix]
 from_level: 4
 ```
 
@@ -256,7 +237,6 @@ When one outcome or ordering rule appears in several sections — an assertion, 
 ```yaml
 id: architect.narrowed-absence-scan-must-assert-its-scan-set
 title: Narrowed Inherited Absence Scan Without An Asserted Scan Set
-stacks: [fastapi, flask, django, starlette, express, nestjs, fastify, gin, echo, fiber, axum, actix, litellm]
 from_level: 4
 ```
 
@@ -269,7 +249,6 @@ When a unit resolves a conflict with an earlier unit's repository-wide absence t
 ```yaml
 id: architect.create-joins-a-frozen-closed-set
 title: New File Joins A Set An Existing Test Pins
-stacks: [all]
 from_level: 0
 ```
 
@@ -282,7 +261,6 @@ A file created under an existing directory can break a test that pins that direc
 ```yaml
 id: architect.surface-references-absent-artifact
 title: Surface Registers An Artifact Missing From The Tree
-stacks: [docker, docker-compose, kubernetes, kustomize, helm, github-actions, gitlab-ci, jenkins, terraform]
 from_level: 0
 ```
 
